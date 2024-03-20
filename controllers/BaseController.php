@@ -2,6 +2,8 @@
 
 class BaseController
 {
+    public $view;
+
     protected function changeRequestToGET()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
