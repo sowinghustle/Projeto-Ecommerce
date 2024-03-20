@@ -10,33 +10,34 @@ class Database
 
     public function __construct()
     {
-        $this->conn = new mysqli(
-            $this->host,
-            $this->login,
-            $this->pass,
-            $this->db
-        );
+        try {
+            $dsn = "mysql:host={$this->host};dbname={$this->db}";
+            $this->conn = new PDO($dsn, $this->login, $this->pass);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+        }
     }
 
     public function query($query)
     {
-        $result = $this->conn->query($query);
-
-        if ($result && $result->num_rows > 0) {
-            $data = array();
-
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-
+        try {
+            $stmt = $this->conn->query($query);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $data;
+        } catch (PDOException $e) {
+            echo "Query failed: " . $e->getMessage();
+            return false;
         }
-
-        return false;
     }
 
     public function exec($query)
     {
-        return $this->conn->query($query);
+        try {
+            return $this->conn->exec($query);
+        } catch (PDOException $e) {
+            echo "Query failed: " . $e->getMessage();
+            return false;
+        }
     }
 }
