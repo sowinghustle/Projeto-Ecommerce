@@ -2,7 +2,7 @@
 
 class Database
 {
-    private $host = "localhost";
+    private $host = "db";
     private $db = "db";
     private $login = "user";
     private $pass = "you_dont_deserve_to_live";
@@ -11,8 +11,7 @@ class Database
     public function __construct()
     {
         try {
-            $dsn = "mysql:host={$this->host};dbname={$this->db}";
-            $this->conn = new PDO($dsn, $this->login, $this->pass);
+            $this->conn = new PDO("mysql:host=$this->host;dbname=$this->db", $this->login, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
