@@ -1,1 +1,23 @@
+@import url(normalize.css);
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+    --Nav: #5C6F68;
+    --Header: #2f2f2f;
+    --Background: #585B56;
+
+    --PrimaryButtonColor: #AC80A0;
+    --PrimaryButtonHoverColor: #d4a7c8;
+  
+    --InputFocusColor: #f54703;
+  
+    --FontPrimaryColor: #EFF1ED;
+    --FontSecondaryColor: #3C0919;
+  }
+
+
+body {
+    color: var(--FontPrimaryColor);
+    background-color: var(--Background);
+    font-family: "Atkinson Hyperlegible", "Inter", "Work Sans", system-ui, sans-serif;
+}
