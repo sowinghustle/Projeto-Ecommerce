@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# RewriteBase /www/DeuBug/
+
+# Block access to controllers, views, and models folders
+
+RewriteRule ^(controllers|views|models)($|/) - [F]
+
+# Redirect all requests to index.php
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
