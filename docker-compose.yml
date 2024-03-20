@@ -10,7 +10,7 @@ services:
     environment:
       MYSQL_DATABASE: db
       MYSQL_USER: user
-      MYSQL_PASSWORD: 1234
+      MYSQL_PASSWORD: you_dont_deserve_to_live
       MYSQL_RANDOM_ROOT_PASSWORD: true
 
   phpmyadmin:
@@ -21,7 +21,7 @@ services:
     environment:
       PMA_HOST: db
       PMA_USER: user
-      PMA_PASSWORD: 1234
+      PMA_PASSWORD: you_dont_deserve_to_live
     depends_on:
       - db
 
