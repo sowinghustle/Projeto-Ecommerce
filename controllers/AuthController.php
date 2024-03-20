@@ -12,7 +12,7 @@ class AuthController extends BaseController
     public function register()
     {
         $this->view->title = "Signin";
-        include "views/auth/signin.php";
+        include "views/auth/register.php";
     }
     public function logout()
     {
