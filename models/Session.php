@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Session
 {
@@ -7,42 +7,42 @@ class Session
         Session::start();
     }
 
+    public function set($key, $value)
+    {
+        if (is_null($value))
+            Session::privUnset("$key");
+        else
+            Session::privSet("$key", $value);
+    }
+
+    public function get($key, $default = null)
+    {
+        return Session::privGet("$key", $default);
+    }
+
     public static function destroy()
     {
         session_destroy();
     }
 
-    public static function start() 
+    public static function start()
     {
         session_start();
     }
 
-    public function set($key, $value)
-    {
-        if (is_null($value))
-            Session::remove("LOCAL: $key");
-        else 
-            Session::set("LOCAL: $key", $value);
-    }
-
-    public function get($key, $default = null)
-    {
-        return Session::get("LOCAL: $key", $default);
-    }
-
-    private static function set($key, $value)
+    private static function privSet($key, $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    private static function get($key, $default = null)
+    private static function privGet($key, $default = null)
     {
-        return isset($_SESSION[$key]) ?
+        return isset ($_SESSION[$key]) ?
             $_SESSION[$key] :
             $default;
     }
 
-    private static function remove($key)
+    private static function privUnset($key)
     {
         unset($_SESSION[$key]);
     }
