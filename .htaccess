@@ -1,7 +1,5 @@
 RewriteEngine On
 
-# RewriteBase /www/DeuBug/
-
 # Block access to controllers, views, and models folders
 
 RewriteRule ^(controllers|views|models)($|/) - [F]
