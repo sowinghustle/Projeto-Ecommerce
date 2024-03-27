@@ -2,5 +2,7 @@
     "/": "HomeController@index",
     "/login": "AuthController@login",
     "/register": "AuthController@register",
+    "/signin": "AuthController@login",
+    "/signup": "AuthController@register",
     "/logout": "AuthController@logout"
 }
