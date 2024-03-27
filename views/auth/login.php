@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/index.css" />
     <title>Login</title>
 </head>
 
@@ -14,23 +15,20 @@
     </h1>
     <div class="container">
         <div class="main d-flex justify-content-center mt-4">
-            <div class="card text-start">
+            <div class="card text-start h-75 w-50">
                 <div class="card-body">
                     <form>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                            <label for="InputEmail" class="form-label">E-Mail</label>
+                            <input type="email" class="form-control" id="InputEmail1">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <label for="InputPassword" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="InputPassword1">
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
