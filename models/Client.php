@@ -4,7 +4,7 @@ require_once "Hash.php";
 
 class Client
 {
-    private $id;
+    private $id = 0;
     private $username;
     private $email;
     private $password;
@@ -22,17 +22,30 @@ class Client
         try {
             $conn = new Database();
 
-            $pdo = $conn->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
+            $pdo = null;
+
+            if ($this->id == 0) {
+                $pdo = $conn->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
+            } else {
+                $pdo = $conn->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
+                $pdo->bindValue(":id", $this->id, PDO::PARAM_INT);
+            }
+
             $pdo->bindValue(":username", $this->username, PDO::PARAM_STR);
             $pdo->bindValue(":email", $this->email, PDO::PARAM_STR);
             $pdo->bindValue(":password", $this->password, PDO::PARAM_STR);
             $pdo->execute();
 
-            $stmt = $conn->pdo->prepare("SELECT @id AS id");
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($this->id == 0) {
+                $stmt = $conn->pdo->prepare("SELECT @id AS id");
+                $stmt->execute();
 
-            return array(true, $result['id']);
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $this->id = $result["id"];
+            }
+
+            return array(true, null);
         } catch (PDOException $e) {
             return array(false, "unexpected exception " . $e->getMessage());
         }
@@ -61,11 +74,6 @@ class Client
     public function setEmail($newEmail)
     {
         $this->email = $newEmail;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     public function changePassword($newPassword)
