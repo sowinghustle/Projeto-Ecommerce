@@ -6,7 +6,7 @@ services:
     image: mysql:8.3.0
     volumes:
       - db_data:/var/lib/mysql
-      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./sql/:/docker-entrypoint-initdb.d/
     environment:
       MYSQL_DATABASE: db
       MYSQL_USER: user
@@ -30,7 +30,6 @@ services:
     build: .
     ports:
       - "8000:80"
-      - "3000:80"
     volumes:
       - ./:/var/www/html
     depends_on:

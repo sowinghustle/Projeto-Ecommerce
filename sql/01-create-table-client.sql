@@ -1,0 +1,7 @@
+CREATE TABLE client (
+    id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(80) UNIQUE NOT NULL,
+    email VARCHAR(200) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
