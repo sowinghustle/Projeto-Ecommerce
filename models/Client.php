@@ -104,7 +104,7 @@ class Client
 
     public function setUsername($newUsername)
     {
-        $this->usernmae = $newUsername;
+        $this->username = $newUsername;
     }
 
     public function getEmail()
