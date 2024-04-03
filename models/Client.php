@@ -29,6 +29,10 @@ class Client
             return [false, "you should provide valid username"];
         }
 
+        if (!$email) {
+            return [false, "you should provid valid email"];
+        }
+
         if (!$isPasswordOptional && !$password) {
             return [false, "you should provide valid password"];
         }

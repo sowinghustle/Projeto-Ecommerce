@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="Input" class="form-label">Usuário</label>
+                            <label for="username" class="form-label">Usuário</label>
                             <input name="username" type="username" class="form-control" id="InputUsername1"
                                 value="<?php echo $this->view->username ?>">
                         </div>

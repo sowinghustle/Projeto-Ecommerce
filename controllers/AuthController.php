@@ -21,15 +21,27 @@ class AuthController extends BaseController
             $email = $_POST["email"];
             $password = $_POST["password"];
 
-            $client = new Client($username, $email, $password);
-            $result = $client->save();
+            $this->view->username = $username;
+            $this->view->email = $email;
 
-            if ($result[0] == false) {
-                $this->view->username = $username;
-                $this->view->email = $email;
-                $this->view->errorMsg = $result[1];
+
+            $client = new Client($username, $email, $password);
+            $checkIfUserExistsResult = $client->findByUsernameEmailAndPassword(true);
+
+            if ($checkIfUserExistsResult[0] == false) { // deu erro
+                $this->view->errorMsg = $checkIfUserExistsResult[1];
+            } else if ($checkIfUserExistsResult[1] == true) { // encontrou um usuário com mesmo email ou uusário
+                $this->view->errorMsg = "Já existe um usuário cadastrado com este e-mail ou nome de usuário.";
             } else {
-                $this->view->successMsg = "O usuário foi cadastrado com sucesso!";
+                $saveResult = $client->save();
+
+                if ($saveResult[0] == false) { // deu erro
+                    $this->view->errorMsg = $saveResult[1];
+                } else {
+                    $this->view->username = "";
+                    $this->view->email = "";
+                    $this->view->successMsg = "O usuário foi cadastrado com sucesso!";
+                }
             }
         }
 
