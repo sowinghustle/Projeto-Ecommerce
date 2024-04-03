@@ -33,7 +33,7 @@ class AuthController extends BaseController
             }
         }
 
-        $this->view->title = "Signin";
+        $this->view->title = "Create account";
         include "views/auth/register.php";
     }
     public function logout()
