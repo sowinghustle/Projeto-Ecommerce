@@ -33,8 +33,8 @@ class Client
         }
 
         try {
-            $conn = new Database();
-            $stmt = $conn->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM client c WHERE c.username=:username AND c.password=IF(:is_password_optional, c.password, :password)");
+            $db = new Database();
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM client c WHERE c.username=:username AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
             $stmt->bindValue(":is_password_optional", $isPasswordOptional, PDO::PARAM_BOOL);
             $stmt->bindValue(":password", $password, PDO::PARAM_STR);
@@ -48,10 +48,10 @@ class Client
                 $this->email = $result["email"];
                 $this->password = $result["password"];
 
-                return [true, true];
+                return array(true, true);
             }
 
-            return [true, false];
+            return array(true, false);
         } catch (PDOException $e) {
             return array(false, "Sorry, we couldn't connect to the database. Please, try later...");
         } catch (Exception $e) {
@@ -62,13 +62,13 @@ class Client
     public function save()
     {
         try {
-            $conn = new Database();
+            $db = new Database();
             $pdo = null;
 
             if ($this->id == 0) {
-                $pdo = $conn->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
+                $pdo = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
             } else {
-                $pdo = $conn->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
+                $pdo = $db->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
                 $pdo->bindValue(":id", $this->id, PDO::PARAM_INT);
             }
 
@@ -78,7 +78,7 @@ class Client
             $pdo->execute();
 
             if ($this->id == 0) {
-                $stmt = $conn->pdo->prepare("SELECT @id AS id");
+                $stmt = $db->pdo->prepare("SELECT @id AS id");
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 $this->id = $result["id"];

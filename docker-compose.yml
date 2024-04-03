@@ -12,6 +12,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: you_dont_deserve_to_live
       MYSQL_RANDOM_ROOT_PASSWORD: true
+    networks:
+      - just_dance
 
   phpmyadmin:
     container_name: php_my_admin
@@ -24,6 +26,8 @@ services:
       PMA_PASSWORD: you_dont_deserve_to_live
     depends_on:
       - db
+    networks:
+      - just_dance
 
   php:
     container_name: apache
@@ -36,9 +40,14 @@ services:
       - db
     links:
       - db
+    networks:
+      - just_dance
     stdin_open: true
     tty: true
 
+networks:
+  just_dance:
+    driver: bridge
 volumes:
   db_data:
 
