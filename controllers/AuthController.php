@@ -1,11 +1,39 @@
 <?php
 
 require_once "BaseController.php";
-
+require_once "models/Session.php";
 class AuthController extends BaseController
 {
     public function login()
     {
+        $this->view->emailOrUsername = "";
+        $this->view->errorMsg = "";
+        if ($this->requestIsPOST()) {
+
+            $usernameOrEmail = trim($_POST["email"] ?? "");
+            echo $usernameOrEmail;
+            $password = trim($_POST["password"] ?? "");
+
+            $client = new Client($usernameOrEmail, $usernameOrEmail, $password);
+            $this->view->emailOrUsername = $usernameOrEmail;
+
+            if (strlen($usernameOrEmail) == 0) {
+                $this->view->errorMsg = "Você precisa fornecedor um nome de usuário ou E-mail!";
+            } else if (strlen($password) == 0) {
+                $this->view->errorMsg = "Você precisa fornecer uma senha!";
+            } else {
+                $result = $client->findByUsernameEmailAndPassword();
+                if ($result[0] == false) {
+                    $this->view->errorMsg = $result[1];
+                } else if ($result[1] == false) {
+                    $this->view->errorMsg = "Verifique se as credenciais estão corretas!";
+                } else {
+                    $session = new Session();
+                    $session->set("usuario-logado", $client->getId());
+                    header("location:.");
+                }
+            }
+        }
         $this->view->title = "Login";
         include "views/auth/login.php";
     }
