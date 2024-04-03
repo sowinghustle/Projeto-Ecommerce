@@ -33,18 +33,19 @@
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuário</label>
                             <input name="username" type="username" class="form-control" id="InputUsername1"
-                                value="<?php echo $this->view->username ?>">
+                                value="<?php echo $this->view->username ?>" autocomplete="username">
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">E-Mail</label>
                             <input name="email" type="email" class="form-control" id="InputEmail1"
-                                value="<?php echo $this->view->email ?>">
+                                value="<?php echo $this->view->email ?>" autocomplete="email">
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Senha</label>
-                            <input name="password" type="password" class="form-control" id="InputPassword1" value="">
+                            <input name="password" type="password" class="form-control" id="InputPassword1"
+                                autocomplete="current-password" value="">
                         </div>
 
                         <div class="d-flex justify-content-center">

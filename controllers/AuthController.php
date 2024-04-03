@@ -17,30 +17,37 @@ class AuthController extends BaseController
         $this->view->successMsg = "";
 
         if ($this->requestIsPOST()) {
-            $username = $_POST["username"];
-            $email = $_POST["email"];
-            $password = $_POST["password"];
+            $username = trim($_POST["username"] ?? "");
+            $email = trim($_POST["email"] ?? "");
+            $password = trim($_POST["password"] ?? "");
 
             $this->view->username = $username;
             $this->view->email = $email;
 
-
-            $client = new Client($username, $email, $password);
-            $checkIfUserExistsResult = $client->findByUsernameEmailAndPassword(true);
-
-            if ($checkIfUserExistsResult[0] == false) { // deu erro
-                $this->view->errorMsg = $checkIfUserExistsResult[1];
-            } else if ($checkIfUserExistsResult[1] == true) { // encontrou um usuário com mesmo email ou uusário
-                $this->view->errorMsg = "Já existe um usuário cadastrado com este e-mail ou nome de usuário.";
+            if (strlen($username) == 0) {
+                $this->view->errorMsg = "Você precisa fornecedor um nome de usuário!";
+            } else if (strlen($email) == 0) {
+                $this->view->errorMsg = "Você precisa fornecer um email!";
+            } else if (strlen($password) == 0) {
+                $this->view->errorMsg = "Você precisa fornecer uma senha!";
             } else {
-                $saveResult = $client->save();
+                $client = new Client($username, $email, $password);
+                $checkIfUserExistsResult = $client->findByUsernameEmailAndPassword(true);
 
-                if ($saveResult[0] == false) { // deu erro
-                    $this->view->errorMsg = $saveResult[1];
+                if ($checkIfUserExistsResult[0] == false) { // deu erro
+                    $this->view->errorMsg = $checkIfUserExistsResult[1];
+                } else if ($checkIfUserExistsResult[1] == true) { // encontrou um usuário com mesmo email ou uusário
+                    $this->view->errorMsg = "Já existe um usuário cadastrado com este e-mail ou nome de usuário.";
                 } else {
-                    $this->view->username = "";
-                    $this->view->email = "";
-                    $this->view->successMsg = "O usuário foi cadastrado com sucesso!";
+                    $saveResult = $client->save();
+
+                    if ($saveResult[0] == false) { // deu erro
+                        $this->view->errorMsg = $saveResult[1];
+                    } else {
+                        $this->view->username = "";
+                        $this->view->email = "";
+                        $this->view->successMsg = "O usuário foi cadastrado com sucesso!";
+                    }
                 }
             }
         }
