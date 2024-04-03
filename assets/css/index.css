@@ -12,12 +12,26 @@
     --InputFocusColor: #f54703;
   
     --FontPrimaryColor: #EFF1ED;
-    --FontSecondaryColor: #3C0919;
+    --FontSecondaryColor: #636363;
   }
 
-
+  html {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
 body {
     color: var(--FontPrimaryColor);
     background-color: var(--Background);
     font-family: "Atkinson Hyperlegible", "Inter", "Work Sans", system-ui, sans-serif;
+    flex-grow: 1;
+}
+
+.card {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+form {
+  color: var(--FontSecondaryColor);
 }
