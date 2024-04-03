@@ -19,9 +19,10 @@ class Client
             $this->changePassword($password);
     }
 
-    public function findByUsernameAndPassword($isPasswordOptional = false)
+    public function findByUsernameEmailAndPassword($isPasswordOptional = false)
     {
         $username = $this->username;
+        $email = $this->email;
         $password = $this->password;
 
         if (!$username) {
@@ -34,10 +35,11 @@ class Client
 
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM client c WHERE c.username=:username AND c.password=IF(:is_password_optional, c.password, :password)");
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM client c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
-            $stmt->bindValue(":is_password_optional", $isPasswordOptional, PDO::PARAM_BOOL);
+            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
             $stmt->bindValue(":password", $password, PDO::PARAM_STR);
+            $stmt->bindValue(":is_password_optional", $isPasswordOptional, PDO::PARAM_BOOL);
             $stmt->execute();
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -53,7 +55,8 @@ class Client
 
             return array(true, false);
         } catch (PDOException $e) {
-            return array(false, "Sorry, we couldn't connect to the database. Please, try later...");
+            echo $e;
+            return array(false, "Sorry, we couldn't connect to the database. Please, try later.");
         } catch (Exception $e) {
             return array(false, "Sorry, something went wrong, and was not possible to proccess your request!");
         }
@@ -86,7 +89,7 @@ class Client
 
             return array(true, null);
         } catch (PDOException $e) {
-            return array(false, "Sorry, we couldn't connect to the database to save the data. Please, try again later...");
+            return array(false, "Sorry, we couldn't connect to the database to save the data. Please, try again later.");
         } catch (Exception $e) {
             return array(false, "Sorry, something went wrong, and was not possible to proccess your request!");
         }
