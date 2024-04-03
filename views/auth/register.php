@@ -21,16 +21,27 @@
                         <span class="text-danger">
                             <?php echo $this->view->errorMsg ?>
                         </span>
+                        <span class="text-success">
+                            <?php echo $this->view->successMsg ?>
+                        </span>
 
                         <div class="mb-3">
-                            <label for="InputEmail" class="form-label">E-Mail</label>
+                            <label for="Input" class="form-label">Usuário</label>
+                            <input name="username" type="username" class="form-control" id="InputUsername1"
+                                value="<?php echo $this->view->username ?>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-Mail</label>
                             <input name="email" type="email" class="form-control" id="InputEmail1"
                                 value="<?php echo $this->view->email ?>">
                         </div>
+
                         <div class="mb-3">
-                            <label for="InputPassword" class="form-label">Senha</label>
+                            <label for="password" class="form-label">Senha</label>
                             <input name="password" type="password" class="form-control" id="InputPassword1" value="">
                         </div>
+
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
