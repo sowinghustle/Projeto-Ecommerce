@@ -85,6 +85,9 @@ class AuthController extends BaseController
     }
     public function logout()
     {
+        $session = new Session();
+        $session->set("usuario-logado", null);
+
         $this->view->title = "Logout";
         header("location:login");
     }
