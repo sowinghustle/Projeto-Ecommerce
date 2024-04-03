@@ -21,9 +21,14 @@
             <div class="card text-start h-75 w-50">
                 <div class="card-body">
                     <form method="POST">
+                        <div class="mb-2">
+                            <span class="text-danger">
+                                <?php echo $this->view->errorMsg ?>
+                            </span>
+                        </div>
                         <div class="mb-3">
-                            <label for="InputEmail1" class="form-label">E-Mail</label>
-                            <input type="email" class="form-control" id="InputEmail1" name="email">
+                            <label for="InputEmail1" class="form-label">E-Mail ou Username</label>
+                            <input class="form-control" id="InputEmail1" name="email" value="<?php echo $this->view->emailOrUsername ?>">
                         </div>
                         <div class="mb-3">
                             <label for="InputPassword1" class="form-label">Senha</label>
