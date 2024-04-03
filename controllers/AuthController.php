@@ -11,6 +11,14 @@ class AuthController extends BaseController
     }
     public function register()
     {
+        if ($this->requestIsPOST()) {
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+
+            $this->view->email = $email;
+            $this->view->errorMsg = "Ocorreu um erro (mentira)";
+        }
+
         $this->view->title = "Signin";
         include "views/auth/register.php";
     }
