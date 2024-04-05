@@ -25,7 +25,7 @@ $rotasJson = file_get_contents('routes.json');
 $rotas = json_decode($rotasJson, true);
 
 if ($rotas === null) {
-    die ('Error decoding routes JSON file.');
+    die('Error decoding routes JSON file.');
 }
 
 // remove a última barra das rotas, por exemplo: http://localhost:80/conta/editar/ => http://localhost:80/conta/editar
@@ -72,7 +72,7 @@ if ($rotaEncontrada) {
 
 function getBaseUrl()
 {
-    $protocol = isset ($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
     $baseUrl = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
     return "$protocol://$host$baseUrl";
