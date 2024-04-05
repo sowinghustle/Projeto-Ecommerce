@@ -1,8 +1,9 @@
-CREATE TABLE books { 
+CREATE TABLE books (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
     author VARCHAR(255),
-    isbn VARCHAR(255) NOT NULL,
+    isbn VARCHAR(255) UNIQUE NOT NULL,
+    category VARCHAR(255) NOT NULL,
     price FLOAT NOT NULL,
-    PRIMARY KEY (id),
-}
+    PRIMARY KEY (id)
+);
