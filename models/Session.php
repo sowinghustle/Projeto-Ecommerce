@@ -4,20 +4,27 @@ class Session
 {
     public function __construct()
     {
-        Session::start();
+        self::start();
+    }
+
+    public function has($key): bool
+    {
+        return self::_sessionHas($key);
     }
 
     public function set($key, $value)
     {
-        if (is_null($value))
-            Session::privUnset("$key");
-        else
-            Session::privSet("$key", $value);
+        self::_sessionSet("$key", $value);
+    }
+
+    public function unset($key)
+    {
+        self::_sessionUnset("$key");
     }
 
     public function get($key, $default = null)
     {
-        return Session::privGet("$key", $default);
+        return self::_sessionGet("$key", $default);
     }
 
     public static function destroy()
@@ -30,19 +37,24 @@ class Session
         session_start();
     }
 
-    private static function privSet($key, $value)
+    private static function _sessionHas($key)
+    {
+        return isset($_SESSION[$key]);
+    }
+
+    private static function _sessionSet($key, $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    private static function privGet($key, $default = null)
+    private static function _sessionGet($key, $default = null)
     {
-        return isset ($_SESSION[$key]) ?
+        return self::_sessionHas($key) ?
             $_SESSION[$key] :
             $default;
     }
 
-    private static function privUnset($key)
+    private static function _sessionUnset($key)
     {
         unset($_SESSION[$key]);
     }

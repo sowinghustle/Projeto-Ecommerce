@@ -1,6 +1,7 @@
 <?php
 
 require_once "Hash.php";
+require_once "models/Errors.php";
 
 class Client
 {
@@ -11,7 +12,7 @@ class Client
 
     public function __construct($username, $email, $password, $id = null)
     {
-        $this->id = $id;
+        $this->id = $id ?? 0;
         $this->username = $username;
         $this->email = $email;
 
@@ -19,27 +20,21 @@ class Client
             $this->changePassword($password);
     }
 
-    public function findByUsernameEmailAndPassword($isPasswordOptional = false)
+    private function throw_exception()
+    {
+        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
+    }
+
+    public function fillWithUserByUsernameOrEmailAndPassword($isPasswordOptional = false): bool
     {
         $username = $this->username;
         $email = $this->email;
         $password = $this->password;
 
-        if (!$username) {
-            return [false, "you should provide valid username"];
-        }
-
-        if (!$email) {
-            return [false, "you should provid valid email"];
-        }
-
-        if (!$isPasswordOptional && !$password) {
-            return [false, "you should provide valid password"];
-        }
-
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM client c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
+
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM clients c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
             $stmt->bindValue(":password", $password, PDO::PARAM_STR);
@@ -54,49 +49,48 @@ class Client
                 $this->email = $result["email"];
                 $this->password = $result["password"];
 
-                return array(true, true);
+                return true;
             }
-
-            return array(true, false);
-        } catch (PDOException $e) {
-            echo $e;
-            return array(false, "Sorry, we couldn't connect to the database. Please, try later.");
         } catch (Exception $e) {
-            return array(false, "Sorry, something went wrong, and was not possible to proccess your request!");
+            $this->throw_exception();
         }
+
+        return false;
     }
 
     public function save()
     {
         try {
             $db = new Database();
-            $pdo = null;
+            $stmt = null;
 
             if ($this->id == 0) {
-                $pdo = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
+                $stmt = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, @id)');
             } else {
-                $pdo = $db->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
-                $pdo->bindValue(":id", $this->id, PDO::PARAM_INT);
+                $stmt = $db->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
+                $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
             }
 
-            $pdo->bindValue(":username", $this->username, PDO::PARAM_STR);
-            $pdo->bindValue(":email", $this->email, PDO::PARAM_STR);
-            $pdo->bindValue(":password", $this->password, PDO::PARAM_STR);
-            $pdo->execute();
+            $stmt->bindValue(":username", $this->username, PDO::PARAM_STR);
+            $stmt->bindValue(":email", $this->email, PDO::PARAM_STR);
+            $stmt->bindValue(":password", $this->password, PDO::PARAM_STR);
+            $stmt->execute();
 
-            if ($this->id == 0) {
-                $stmt = $db->pdo->prepare("SELECT @id AS id");
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                $this->id = $result["id"];
+            $stmt = $db->pdo->prepare("SELECT @id AS id");
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $this->id = $result["id"] || 0;
+
+            if ($this->id != 0) {
+                return true;
             }
-
-            return array(true, null);
-        } catch (PDOException $e) {
-            return array(false, "Sorry, we couldn't connect to the database to save the data. Please, try again later.");
         } catch (Exception $e) {
-            return array(false, "Sorry, something went wrong, and was not possible to proccess your request!");
+            $this->throw_exception();
         }
+
+        return false;
     }
 
     public function getId()

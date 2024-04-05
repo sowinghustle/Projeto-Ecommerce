@@ -2,80 +2,108 @@
 
 require_once "BaseController.php";
 require_once "models/Session.php";
+require_once "models/Errors.php";
+
 class AuthController extends BaseController
 {
     public function login()
     {
         $this->view->emailOrUsername = "";
+        $this->view->password = "";
         $this->view->errorMsg = "";
+        $this->view->successMsg = "";
+
         if ($this->requestIsPOST()) {
+            try {
+                $usernameOrEmail = trim($_POST["email"] ?? "");
+                $password = $_POST["password"] ?? "";
 
-            $usernameOrEmail = trim($_POST["email"] ?? "");
-            echo $usernameOrEmail;
-            $password = trim($_POST["password"] ?? "");
+                $this->view->usernameOrEmail = $usernameOrEmail;
 
-            $client = new Client($usernameOrEmail, $usernameOrEmail, $password);
-            $this->view->emailOrUsername = $usernameOrEmail;
+                $client = new Client($usernameOrEmail, $usernameOrEmail, $password);
 
-            if (strlen($usernameOrEmail) == 0) {
-                $this->view->errorMsg = "Você precisa fornecedor um nome de usuário ou E-mail!";
-            } else if (strlen($password) == 0) {
-                $this->view->errorMsg = "Você precisa fornecer uma senha!";
-            } else {
-                $result = $client->findByUsernameEmailAndPassword();
-                if ($result[0] == false) {
-                    $this->view->errorMsg = $result[1];
-                } else if ($result[1] == false) {
-                    $this->view->errorMsg = "Verifique se as credenciais estão corretas!";
-                } else {
-                    $session = new Session();
-                    $session->set("usuario-logado", $client->getId());
-                    header("location:.");
-                }
+                if (!$this->stringIsNotEmpty($usernameOrEmail))
+                    throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário ou e-mail!");
+
+                if (!$this->stringIsNotEmpty($password))
+                    throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
+
+                if (!$client->fillWithUserByUsernameOrEmailAndPassword())
+                    throw Bookerr::ValidationError("Verifique se as credenciais estão corretas!");
+
+                $session = new Session();
+                $session->set("usuario-logado", $client->getId());
+
+                header("location:.");
+            } catch (Bookerr $error) {
+                $this->view->errorMsg = $error->getMessage();
+            }
+        } else {
+            $session = new Session();
+
+            if ($session->has("email")) {
+                $this->view->usernameOrEmail = $session->get("email");
+                $session->unset("email");
+            }
+
+            if ($session->has("password")) {
+                $this->view->password = $session->get("password");
+                $session->unset("password");
+            }
+
+            if ($session->has("success_msg")) {
+                $this->view->successMsg = $session->get("success_msg");
+                $session->unset("success_msg");
             }
         }
+
         $this->view->title = "Login";
         include "views/auth/login.php";
     }
+
     public function register()
     {
         $this->view->username = "";
         $this->view->email = "";
         $this->view->errorMsg = "";
-        $this->view->successMsg = "";
 
         if ($this->requestIsPOST()) {
-            $username = trim($_POST["username"] ?? "");
-            $email = trim($_POST["email"] ?? "");
-            $password = trim($_POST["password"] ?? "");
+            $client = null;
 
-            $this->view->username = $username;
-            $this->view->email = $email;
+            try {
+                $username = trim($_POST["username"] ?? "");
+                $email = trim($_POST["email"] ?? "");
+                $password = $_POST["password"] ?? "";
 
-            if (strlen($username) == 0) {
-                $this->view->errorMsg = "Você precisa fornecedor um nome de usuário!";
-            } else if (strlen($email) == 0) {
-                $this->view->errorMsg = "Você precisa fornecer um email!";
-            } else if (strlen($password) == 0) {
-                $this->view->errorMsg = "Você precisa fornecer uma senha!";
-            } else {
+                $this->view->username = $username;
+                $this->view->email = $email;
+
                 $client = new Client($username, $email, $password);
-                $checkIfUserExistsResult = $client->findByUsernameEmailAndPassword(true);
 
-                if ($checkIfUserExistsResult[0] == false) { // deu erro
-                    $this->view->errorMsg = $checkIfUserExistsResult[1];
-                } else if ($checkIfUserExistsResult[1] == true) { // encontrou um usuário com mesmo email ou uusário
-                    $this->view->errorMsg = "Já existe um usuário cadastrado com este e-mail ou nome de usuário.";
-                } else {
-                    $saveResult = $client->save();
+                if (!$this->stringIsNotEmpty($username))
+                    throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário!");
 
-                    if ($saveResult[0] == false) { // deu erro
-                        $this->view->errorMsg = $saveResult[1];
-                    } else {
-                        $this->view->username = "";
-                        $this->view->email = "";
-                        $this->view->successMsg = "O usuário foi cadastrado com sucesso!";
-                    }
+                if (!$this->stringIsNotEmpty($email))
+                    throw Bookerr::ValidationError("Você precisa fornecer um e-mail!");
+
+                if (!$this->stringIsNotEmpty($password))
+                    throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
+
+                if (!$client->save()) {
+                    throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
+                }
+
+                $session = new Session();
+                $session->set("email", $email);
+                $session->set("password", $password);
+                $session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
+
+                header("location:login");
+            } catch (Bookerr $error) {
+                $this->view->errorMsg = $error->getMessage();
+
+                if ($client && $client->fillWithUserByUsernameOrEmailAndPassword(true)) {
+                    $this->view->errorMsg = "Este usuário já existe!";
                 }
             }
         }
@@ -83,12 +111,12 @@ class AuthController extends BaseController
         $this->view->title = "Create account";
         include "views/auth/register.php";
     }
+
     public function logout()
     {
         $session = new Session();
-        $session->set("usuario-logado", null);
+        $session->unset("usuario-logado");
 
-        $this->view->title = "Logout";
         header("location:login");
     }
 }

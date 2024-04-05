@@ -1,4 +1,4 @@
-INSERT INTO client (
+INSERT INTO clients (
     username, 
     email,
     password

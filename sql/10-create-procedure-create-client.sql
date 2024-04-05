@@ -10,15 +10,14 @@ BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'An error occurred while creating the client';
     END;
 
     START TRANSACTION;
 
-    INSERT INTO client (username, email, password)
+    INSERT INTO clients (username, email, password)
     VALUES (p_username, p_email, p_password);
 
-    SET p_id = LAST_INSERT_ID();
+    SELECT MAX(id) INTO p_id FROM clients;
 
     COMMIT;
 END //

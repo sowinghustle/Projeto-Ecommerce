@@ -28,4 +28,13 @@ class BaseController
     {
         return $_SERVER['REQUEST_METHOD'] == "DELETE";
     }
+
+    protected function stringIsNotEmpty($value)
+    {
+        if (!$value || strlen(trim($value)) == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
