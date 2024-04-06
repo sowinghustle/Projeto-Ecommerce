@@ -19,7 +19,7 @@ services:
     container_name: php_my_admin
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8080:80"
+      - "8000:80"
     environment:
       PMA_HOST: db
       PMA_USER: user
@@ -33,7 +33,7 @@ services:
     container_name: apache
     build: .
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - ./:/var/www/html
     depends_on:
