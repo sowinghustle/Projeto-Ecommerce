@@ -1,8 +1,12 @@
 {
     "/": "HomeController@index",
     "/login": "AuthController@login",
-    "/register": "AuthController@register",
     "/signin": "AuthController@login",
+    "/register": "AuthController@register",
     "/signup": "AuthController@register",
-    "/logout": "AuthController@logout"
+    "/logout": "AuthController@logout",
+    "/books": "BookController@index",
+    "/books/new": "BookController@create",
+    "/books/update": "BookController@update",
+    "/books/delete": "BookController@delete"
 }
