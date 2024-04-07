@@ -32,7 +32,7 @@ class BaseController
     protected function isAdmin()
     {
         $session = new Session();
-        $isAdmin = $session->get("is-admin") == true;
+        $isAdmin = $session->has("is-admin") && $session->get("is-admin");
 
         if ($isAdmin) {
             return true;

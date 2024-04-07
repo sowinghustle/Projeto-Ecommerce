@@ -1,16 +1,19 @@
 INSERT INTO clients (
     username, 
     email,
-    password
+    password,
+    is_admin
 ) VALUES (
     "user",
-    "user@admin.com",
-    "12345678"
+    "user@email.com",
+    "12345678",
+    false
 ),
 (
     "admin",
-    "admin@admin.com",
-    "12345678"
+    "admin@email.com",
+    "12345678",
+    true
 );
 
 INSERT INTO books (

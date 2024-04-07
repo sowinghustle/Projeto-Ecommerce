@@ -33,7 +33,7 @@ class AuthController extends BaseController
 
                 $session = new Session();
                 $session->set("usuario-logado", $client->getId());
-                $session->set("is-admin", false);
+                $session->set("is-admin", $client->getIsAdmin());
 
                 header("location:.");
             } catch (Bookerr $error) {
