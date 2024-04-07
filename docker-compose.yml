@@ -3,8 +3,8 @@ services:
     container_name: database
     image: mysql:8.3.0
     volumes:
-      - db_data:/var/lib/mysql
       - ./sql/:/docker-entrypoint-initdb.d/
+      - db_data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: db
       MYSQL_USER: user
