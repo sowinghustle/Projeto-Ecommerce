@@ -20,11 +20,6 @@ class Client
             $this->changePassword($password);
     }
 
-    private function throw_exception()
-    {
-        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
-    }
-
     public function fillWithUserByUsernameOrEmailAndPassword($isPasswordOptional = false): bool
     {
         $username = $this->username;
@@ -123,5 +118,10 @@ class Client
         // $this->password = Hash::make($newPassword);
         // TODO: add again later, but checking the hashing results and comparison
         $this->password = $newPassword;
+    }
+
+    private function throw_exception()
+    {
+        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
     }
 }

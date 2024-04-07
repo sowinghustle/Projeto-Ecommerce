@@ -27,13 +27,16 @@ class Session
         return self::_sessionGet("$key", $default);
     }
 
-    public static function destroy()
+    public function destroy()
     {
         session_destroy();
     }
 
     private static function start()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE)
+            session_start();
+
         session_start();
     }
 

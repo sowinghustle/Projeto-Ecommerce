@@ -12,6 +12,9 @@ class BookController extends BaseController
 
     public function create()
     {
+        $this->ensureIsLogged();
+        $this->ensureIsAdmin();
+
         if ($this->requestIsPOST()) {
         } else {
         }
@@ -22,6 +25,9 @@ class BookController extends BaseController
 
     public function update()
     {
+        $this->ensureIsLogged();
+        $this->ensureIsAdmin();
+
         if ($this->requestIsPOST()) {
         } else {
         }
@@ -32,7 +38,26 @@ class BookController extends BaseController
 
     public function delete()
     {
+        $this->ensureIsLogged();
+        $this->ensureIsAdmin();
+
         if (!$this->requestIsPOST()) {
+            header("location:/books");
+            return;
+        }
+    }
+
+    private function ensureIsLogged()
+    {
+        if (!$this->isUserLogged()) {
+            header("location:/books");
+            return;
+        }
+    }
+
+    private function ensureIsAdmin()
+    {
+        if (!$this->isAdmin()) {
             header("location:/books");
             return;
         }
