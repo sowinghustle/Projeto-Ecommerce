@@ -62,7 +62,7 @@ class Client
             $stmt = null;
 
             if ($this->id == 0) {
-                $stmt = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, :is_admin @id)');
+                $stmt = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, :is_admin, @id)');
             } else {
                 $stmt = $db->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
                 $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
