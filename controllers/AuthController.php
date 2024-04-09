@@ -2,7 +2,7 @@
 
 require_once "BaseController.php";
 require_once "models/Session.php";
-require_once "models/Errors.php";
+require_once "models/Bookerr.php";
 
 class AuthController extends BaseController
 {

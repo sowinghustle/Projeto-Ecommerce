@@ -1,7 +1,7 @@
 <?php
 
 require_once "Hash.php";
-require_once "models/Errors.php";
+require_once "models/Bookerr.php";
 
 class Client
 {
@@ -19,6 +19,34 @@ class Client
 
         if ($password)
             $this->changePassword($password);
+    }
+
+    public function fillWithUserById(): bool
+    {
+        $id = $this->id;
+
+        try {
+            $db = new Database();
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM clients c WHERE c.id=:id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $this->id = $result["id"];
+                $this->username = $result["username"];
+                $this->email = $result["email"];
+                $this->password = $result["password"];
+                $this->isAdmin = $result["is_admin"];
+
+                return true;
+            }
+        } catch (Exception $e) {
+            $this->throw_exception();
+        }
+
+        return false;
     }
 
     public function fillWithUserByUsernameOrEmailAndPassword($isPasswordOptional = false): bool
