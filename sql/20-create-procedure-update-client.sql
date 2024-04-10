@@ -14,7 +14,7 @@ BEGIN
 
     START TRANSACTION;
 
-    UPDATE clientS SET 
+    UPDATE clients SET 
         username=IFNULL(p_username, username),
         email=IFNULL(p_email, email),
         password=IFNULL(p_password, password)

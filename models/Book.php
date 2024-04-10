@@ -8,18 +8,19 @@ class Book
     private $title;
     private $author;
     private $description;
-    private $isbn;
     private $categories;
     private $price;
+    private $userId;
 
-    public function __construct($title, $author, $description, $categories, $price, $id = null)
+    public function __construct($title, $author, $description, $categories, $price, $userId, $id = null)
     {
         $this->id = $id ?? 0;
-        $this->$title = $title;
-        $this->$author = $author;
-        $this->$description = $description;
-        $this->$categories = $categories;
-        $this->$price = $price;
+        $this->title = $title;
+        $this->author = $author;
+        $this->description = $description;
+        $this->categories = $categories;
+        $this->price = $price;
+        $this->userId = $userId;
     }
 
     public static function withId($id): Book
@@ -33,7 +34,7 @@ class Book
 
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories. b.price FROM books b WHERE b.id=:id");
+            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories, b.price, b.user FROM books b WHERE b.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -44,8 +45,8 @@ class Book
                 $this->title = $result["title"];
                 $this->author = $result["author"];
                 $this->description = $result["description"];
-                $this->isbn = $result["isbn"];
                 $this->price = $result["price"];
+                $this->userId = $result["user"];
                 $this->setCategories($result["categories"]);
 
                 return true;
@@ -107,6 +108,11 @@ class Book
             throw Bookerr::ValidationError("O preço do livro não pode ser menor que zero!");
 
         $this->price = $newPrice;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     private function throw_exception()
