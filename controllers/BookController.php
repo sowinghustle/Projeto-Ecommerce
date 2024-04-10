@@ -51,16 +51,14 @@ class BookController extends BaseController
                 if (!$this->stringIsNotEmpty($description))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
-                if (!$user->save()) {
-                    throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
+                if (!$book->save()) {
+                    throw Bookerr::BadRequest("Não foi possível registrar o livro e suas informações! Tente novamente mais tarde.");
                 }
 
                 $session = new Session();
-                $session->set("author", $author);
-                $session->set("description", $description);
-                $session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
+                $session->set("success_msg", "Livro cadastrado com sucesso!");
 
-                header("location:login");
+                header("location:./book");
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
 
