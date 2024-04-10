@@ -6,7 +6,7 @@ class Database
     private $db = DB_NAME;
     private $login = DB_USER;
     private $pass = DB_PASSWORD;
-    public $pdo;
+    public PDO $pdo;
 
     public function __construct()
     {

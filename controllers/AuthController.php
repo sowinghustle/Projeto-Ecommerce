@@ -8,7 +8,7 @@ class AuthController extends BaseController
 {
     public function login()
     {
-        $this->view->emailOrUsername = "";
+        $this->view->usernameOrEmail = "";
         $this->view->password = "";
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
@@ -33,7 +33,6 @@ class AuthController extends BaseController
 
                 $session = new Session();
                 $session->set("usuario-logado", $user->getId());
-                $session->set("is-admin", $user->getIsAdmin());
 
                 header("location:.");
             } catch (Bookerr $error) {
@@ -90,22 +89,18 @@ class AuthController extends BaseController
                 if (!$this->stringIsNotEmpty($password))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
-                if (!$user->save()) {
+                if (!$user->save())
                     throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
-                }
 
                 $session = new Session();
                 $session->set("email", $email);
                 $session->set("password", $password);
                 $session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
 
-                header("location:login");
+                header("location:../login");
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
-
-                if ($user && $user->fillUserByUsernameOrEmailAndPassword(true)) {
-                    $this->view->errorMsg = "Este usuário já existe!";
-                }
+                $this->setErrorIfUserExists($user);
             }
         }
 
@@ -119,6 +114,18 @@ class AuthController extends BaseController
         $session->unset("is-admin");
         $session->unset("usuario-logado");
 
-        header("location:login");
+        header("location:../login");
+    }
+
+    private function setErrorIfUserExists($user)
+    {
+        try {
+            if ($user && $user->fillUserByUsernameOrEmailAndPassword(true)) {
+                $this->view->errorMsg = "Este usuário já existe!";
+            }
+        } catch (Exception $error) {
+            echo "ErrOr: $error";
+            $this->view->errorMsg = "Não foi possível verificar as informações para o cadastro. Tente novamente mais tarde.";
+        }
     }
 }

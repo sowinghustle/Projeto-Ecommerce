@@ -25,9 +25,6 @@
                             <span class="text-danger">
                                 <?php echo $this->view->errorMsg ?>
                             </span>
-                            <span class="text-success">
-                                <?php echo $this->view->successMsg ?>
-                            </span>
                         </div>
 
                         <div class="mb-3">

@@ -1,19 +1,16 @@
 INSERT INTO users (
     username, 
     email,
-    password,
-    is_admin
+    password
 ) VALUES (
     "user",
     "user@email.com",
-    "12345678",
-    false
+    "12345678"
 ),
 (
     "admin",
     "admin@email.com",
-    "12345678",
-    true
+    "12345678"
 );
 
 INSERT INTO books (
