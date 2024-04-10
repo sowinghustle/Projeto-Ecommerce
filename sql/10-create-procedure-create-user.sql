@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE stp_create_client(
+CREATE PROCEDURE stp_create_user(
     p_username VARCHAR(80),
     p_email VARCHAR(200),
     p_password TEXT,
@@ -14,10 +14,10 @@ BEGIN
 
     START TRANSACTION;
 
-    INSERT INTO clients (username, email, password)
+    INSERT INTO users (username, email, password)
     VALUES (p_username, p_email, p_password);
 
-    SELECT MAX(id) INTO p_id FROM clients;
+    SELECT MAX(id) INTO p_id FROM users;
 
     COMMIT;
 END //

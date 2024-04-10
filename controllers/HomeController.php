@@ -2,7 +2,7 @@
 
 require_once "BaseController.php";
 require_once "models/Database.php";
-require_once "models/Client.php";
+require_once "models/User.php";
 require_once "models/Session.php";
 
 class HomeController extends BaseController

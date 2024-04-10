@@ -3,7 +3,7 @@
 require_once "Hash.php";
 require_once "models/Bookerr.php";
 
-class Client
+class User
 {
     private $id = 0;
     private $username;
@@ -21,9 +21,9 @@ class Client
             $this->changePassword($password);
     }
 
-    public static function withId($id): Client
+    public static function withId($id): User
     {
-        return new Client("", "", "", $id);
+        return new User("", "", "", $id);
     }
 
     public function fillUserById(): bool
@@ -32,7 +32,7 @@ class Client
 
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM clients c WHERE c.id=:id");
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM users c WHERE c.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
 
@@ -63,7 +63,7 @@ class Client
         try {
             $db = new Database();
 
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM clients c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM users c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
             $stmt->bindValue(":password", $password, PDO::PARAM_STR);
@@ -95,9 +95,9 @@ class Client
             $stmt = null;
 
             if ($this->id == 0) {
-                $stmt = $db->pdo->prepare('CALL stp_create_client(:username, :email, :password, :is_admin, @id)');
+                $stmt = $db->pdo->prepare('CALL stp_create_user(:username, :email, :password, :is_admin, @id)');
             } else {
-                $stmt = $db->pdo->prepare('CALL stp_update_client(:id, :username, :email, :password)');
+                $stmt = $db->pdo->prepare('CALL stp_update_user(:id, :username, :email, :password)');
                 $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
             }
 

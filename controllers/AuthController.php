@@ -20,7 +20,7 @@ class AuthController extends BaseController
 
                 $this->view->usernameOrEmail = $usernameOrEmail;
 
-                $client = new Client($usernameOrEmail, $usernameOrEmail, $password);
+                $user = new User($usernameOrEmail, $usernameOrEmail, $password);
 
                 if (!$this->stringIsNotEmpty($usernameOrEmail))
                     throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário ou e-mail!");
@@ -28,12 +28,12 @@ class AuthController extends BaseController
                 if (!$this->stringIsNotEmpty($password))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
-                if (!$client->fillUserByUsernameOrEmailAndPassword())
+                if (!$user->fillUserByUsernameOrEmailAndPassword())
                     throw Bookerr::ValidationError("Verifique se as credenciais estão corretas!");
 
                 $session = new Session();
-                $session->set("usuario-logado", $client->getId());
-                $session->set("is-admin", $client->getIsAdmin());
+                $session->set("usuario-logado", $user->getId());
+                $session->set("is-admin", $user->getIsAdmin());
 
                 header("location:.");
             } catch (Bookerr $error) {
@@ -69,7 +69,7 @@ class AuthController extends BaseController
         $this->view->errorMsg = "";
 
         if ($this->requestIsPOST()) {
-            $client = null;
+            $user = null;
 
             try {
                 $username = trim($_POST["username"] ?? "");
@@ -79,7 +79,7 @@ class AuthController extends BaseController
                 $this->view->username = $username;
                 $this->view->email = $email;
 
-                $client = new Client($username, $email, $password);
+                $user = new User($username, $email, $password);
 
                 if (!$this->stringIsNotEmpty($username))
                     throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário!");
@@ -90,7 +90,7 @@ class AuthController extends BaseController
                 if (!$this->stringIsNotEmpty($password))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
-                if (!$client->save()) {
+                if (!$user->save()) {
                     throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
                 }
 
@@ -103,7 +103,7 @@ class AuthController extends BaseController
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
 
-                if ($client && $client->fillUserByUsernameOrEmailAndPassword(true)) {
+                if ($user && $user->fillUserByUsernameOrEmailAndPassword(true)) {
                     $this->view->errorMsg = "Este usuário já existe!";
                 }
             }

@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE PROCEDURE stp_update_client(
+CREATE PROCEDURE stp_update_user(
     p_id INT,
     p_username VARCHAR(80),
     p_email VARCHAR(200),
@@ -14,7 +14,7 @@ BEGIN
 
     START TRANSACTION;
 
-    UPDATE clients SET 
+    UPDATE users SET 
         username=IFNULL(p_username, username),
         email=IFNULL(p_email, email),
         password=IFNULL(p_password, password)
