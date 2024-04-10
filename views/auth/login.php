@@ -32,14 +32,12 @@
 
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label">E-Mail ou Username</label>
-                            <input class="form-control" id="InputEmail1" name="email"
-                                value="<?php echo $this->view->usernameOrEmail ?>">
+                            <input class="form-control" id="InputEmail1" name="email" value="<?php echo $this->view->emailOrUsername ?>">
                         </div>
 
                         <div class="mb-3">
                             <label for="InputPassword1" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="InputPassword1" name="password"
-                                value="<?php echo $this->view->password ?>">
+                            <input type="password" class="form-control" id="InputPassword1" name="password" value="<?php echo $this->view->password ?>">
                         </div>
 
                         <div class="d-flex justify-content-center">
@@ -50,9 +48,7 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
 
 </html>
