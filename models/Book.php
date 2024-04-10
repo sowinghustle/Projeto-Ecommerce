@@ -1,9 +1,8 @@
 <?php
 
-require_once "Hash.php";
 require_once "models/Bookerr.php";
 
-class Client
+class Book
 {
     private $id = 0;
     private $title;
@@ -23,9 +22,39 @@ class Client
         $this->$price = $price;
     }
 
-    private function throw_exception()
+    public static function withId($id): Book
     {
-        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
+        return new Book("", "", "", "", 0.00, $id);
+    }
+
+    public function fillById(): bool
+    {
+        $id = $this->id;
+
+        try {
+            $db = new Database();
+            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories. b.price FROM books b WHERE b.id=:id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $this->id = $result["id"];
+                $this->title = $result["title"];
+                $this->author = $result["author"];
+                $this->description = $result["description"];
+                $this->isbn = $result["isbn"];
+                $this->price = $result["price"];
+                $this->setCategories($result["categories"]);
+
+                return true;
+            }
+        } catch (Exception $e) {
+            $this->throw_exception();
+        }
+
+        return false;
     }
 
     public function getTitle()
@@ -78,5 +107,10 @@ class Client
             throw Bookerr::ValidationError("O preço do livro não pode ser menor que zero!");
 
         $this->price = $newPrice;
+    }
+
+    private function throw_exception()
+    {
+        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
     }
 }
