@@ -26,26 +26,22 @@
                                 <?php echo $this->view->errorMsg ?>
                             </span>
                             <span class="text-success">
-                                <?php echo $this->view->successMsg ?>
                             </span>
                         </div>
 
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuário</label>
-                            <input name="username" type="username" class="form-control" id="InputUsername1"
-                                value="<?php echo $this->view->username ?>" autocomplete="username">
+                            <input name="username" type="username" class="form-control" id="InputUsername1" value="<?php echo $this->view->username ?>" autocomplete="username">
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">E-Mail</label>
-                            <input name="email" type="email" class="form-control" id="InputEmail1"
-                                value="<?php echo $this->view->email ?>" autocomplete="email">
+                            <input name="email" type="email" class="form-control" id="InputEmail1" value="<?php echo $this->view->email ?>" autocomplete="email">
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Senha</label>
-                            <input name="password" type="password" class="form-control" id="InputPassword1"
-                                autocomplete="current-password" value="">
+                            <input name="password" type="password" class="form-control" id="InputPassword1" autocomplete="current-password" value="">
                         </div>
 
                         <div class="d-flex justify-content-center">
@@ -57,9 +53,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
 
 </html>
