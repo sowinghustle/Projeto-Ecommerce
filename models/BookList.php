@@ -16,7 +16,7 @@ class BookList
     {
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("");
+            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories. b.price FROM books b WHERE IF (empty(:search), true, CONCAT(\"%\", b.title, \"%\", b.author, \"%\", b.description, \"%\") like :search)");
             $stmt->bindValue(":search", $search, PDO::PARAM_STR);
             $stmt->execute();
 
