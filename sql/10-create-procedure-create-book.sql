@@ -6,8 +6,7 @@ CREATE PROCEDURE stp_create_book(
     p_description TEXT,
     p_categories VARCHAR(255),
     p_price DECIMAL(10, 2),
-    p_user INT,
-    OUT p_id INT
+    p_user INT
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -33,6 +32,6 @@ BEGIN
             p_user
         );
 
-        SELECT MAX(id) INTO p_id FROM books;
+        SELECT MAX(id) as id FROM books;
     COMMIT;
 END //
