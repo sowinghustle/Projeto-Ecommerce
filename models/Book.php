@@ -28,6 +28,44 @@ class Book
         return new Book("", "", "", "", 0.00, $id);
     }
 
+    public function save()
+    {
+        try {
+            $db = new Database();
+            $stmt = null;
+
+            if ($this->id == 0) {
+                $stmt = $db->pdo->prepare('CALL stp_create_book(:title, :author, :description, :categories, :price, :user)');
+                $stmt->bindValue(":user", $this->userId, PDO::PARAM_INT);
+            } else {
+                $stmt = $db->pdo->prepare('CALL stp_update_book(:id, :title, :description, :categories,  :price)');
+                $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+            }
+
+            $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
+            $stmt->bindValue(":author", $this->author, PDO::PARAM_STR);
+            $stmt->bindValue(":description", $this->description, PDO::PARAM_STR);
+            $stmt->bindValue(":categories", $this->categories, PDO::PARAM_STR);
+            $stmt->bindValue(":price", $this->price, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            if ($this->id == 0) {
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $this->id = $result["id"];
+            }
+
+            if ($this->id != 0) {
+                return true;
+            }
+        } catch (Exception $e) {
+            echo $e;
+            $this->throw_exception();
+        }
+
+        return false;
+    }
+
     public function fillById(): bool
     {
         $id = $this->id;

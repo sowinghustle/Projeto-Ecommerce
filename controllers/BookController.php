@@ -1,6 +1,7 @@
 <?php
 
 require_once "BaseController.php";
+require_once "models/Book.php";
 
 class BookController extends BaseController
 {
@@ -17,54 +18,58 @@ class BookController extends BaseController
     {
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
-        $this->view->name = "";
+        $this->view->title = "";
         $this->view->author = "";
         $this->view->description = "";
-        $this->view->category = "";
-        $this->view->value = "";
+        $this->view->categories = "";
+        $this->view->price = "";
         $this->ensureIsLogged();
 
         if ($this->requestIsPOST()) {
+            $book = null;
+
             try {
-                $name = trim($_POST["name"] ?? "");
+                $title = trim($_POST["title"] ?? "");
                 $author = trim($_POST["author"] ?? "");
                 $description = $_POST["description"] ?? "";
-                $category = $_POST["category"] ?? "";
-                $value = $_POST["value"] ?? "";
+                $categories = $_POST["categories"] ?? "";
+                $price = $_POST["price"] ?? "";
 
-                $this->view->name = $name;
+                $this->view->title = $title;
                 $this->view->author = $author;
                 $this->view->description = $description;
-                $this->view->category = $category;
-                $this->view->value = $value;
+                $this->view->categories = $categories;
+                $this->view->price = $price;
+
+                if (!$this->stringIsNotEmpty($title))
+                    throw Bookerr::ValidationError("Você precisa fornecer um título ao livro!");
+
+                if (!$this->stringIsNotEmpty($author))
+                    throw Bookerr::ValidationError("Você precisa fornecer um nome do autor!");
+
+                if (!$this->stringIsNotEmpty($description))
+                    throw Bookerr::ValidationError("Você precisa fornecer uma descrição!");
+
+                if (!$this->stringIsNotEmpty($categories))
+                    throw Bookerr::ValidationError("Você precisa fornecer uma categoria!");
+
+                if ($price == null || $price <= 0)
+                    throw Bookerr::ValidationError("Você precisa fornecer um valor válido!");
 
                 $session = new Session();
                 $userId = $session->get("usuario-logado");
-                $book = new Book($name, $author, $description, $category, $value, $userId);
-
-                if (!$this->stringIsNotEmpty($name))
-                    throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário!");
-
-                if (!$this->stringIsNotEmpty($author))
-                    throw Bookerr::ValidationError("Você precisa fornecer um e-mail!");
-
-                if (!$this->stringIsNotEmpty($description))
-                    throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
+                $book = new Book($title, $author, $description, $categories, $price, $userId);
 
                 if (!$book->save()) {
                     throw Bookerr::BadRequest("Não foi possível registrar o livro e suas informações! Tente novamente mais tarde.");
                 }
 
-                $session = new Session();
                 $session->set("success_msg", "Livro cadastrado com sucesso!");
 
-                header("location:./book");
+                header("location:../books");
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
-
-                if ($user && $user->fillUserBynameOrauthorAnddescription(true)) {
-                    $this->view->errorMsg = "Este usuário já existe!";
-                }
+                $this->setErrorIfBookExists($book);
             }
         } else {
         }
@@ -113,5 +118,9 @@ class BookController extends BaseController
             header("location:../books");
             return;
         }
+    }
+
+    private function setErrorIfBookExists($book)
+    {
     }
 }

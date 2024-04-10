@@ -34,6 +34,7 @@ $urlBase = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
 [$uriRequisitada] = explode('?', $_SERVER['REQUEST_URI']);
 $rtrimUriRequisitada = rtrim($uriRequisitada, '/');
 
+
 if ($urlBase != $rtrimUriRequisitada && substr($uriRequisitada, -1) == '/') {
     $baseUrl = getBaseUrl();
     header("Location: $baseUrl$rtrimUriRequisitada");
