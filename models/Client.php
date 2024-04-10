@@ -21,7 +21,12 @@ class Client
             $this->changePassword($password);
     }
 
-    public function fillWithUserById(): bool
+    public static function withId($id): Client
+    {
+        return new Client("", "", "", $id);
+    }
+
+    public function fillUserById(): bool
     {
         $id = $this->id;
 
@@ -49,7 +54,7 @@ class Client
         return false;
     }
 
-    public function fillWithUserByUsernameOrEmailAndPassword($isPasswordOptional = false): bool
+    public function fillUserByUsernameOrEmailAndPassword($isPasswordOptional = false): bool
     {
         $username = $this->username;
         $email = $this->email;

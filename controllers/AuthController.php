@@ -28,7 +28,7 @@ class AuthController extends BaseController
                 if (!$this->stringIsNotEmpty($password))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
-                if (!$client->fillWithUserByUsernameOrEmailAndPassword())
+                if (!$client->fillUserByUsernameOrEmailAndPassword())
                     throw Bookerr::ValidationError("Verifique se as credenciais estão corretas!");
 
                 $session = new Session();
@@ -103,7 +103,7 @@ class AuthController extends BaseController
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
 
-                if ($client && $client->fillWithUserByUsernameOrEmailAndPassword(true)) {
+                if ($client && $client->fillUserByUsernameOrEmailAndPassword(true)) {
                     $this->view->errorMsg = "Este usuário já existe!";
                 }
             }
