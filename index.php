@@ -1,6 +1,7 @@
 <?php
 
 require_once "config.php";
+require_once "models/Session.php";
 
 // redireciona todas as requisições que tem assets no meio para a pasta de assets
 if (strpos($_SERVER['REQUEST_URI'], '/assets/') !== false) {
@@ -61,6 +62,7 @@ if ($rotaEncontrada) {
 
     $controller = new $nomeDoController();
     $controller->view = (object) [];
+    $controller->session = new Session();
 
     try {
         $controller->$nomeDoMetodo(...array_slice($correspondentes, 1));

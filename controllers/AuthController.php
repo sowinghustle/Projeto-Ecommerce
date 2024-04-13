@@ -1,7 +1,6 @@
 <?php
 
 require_once "BaseController.php";
-require_once "models/Session.php";
 require_once "models/Bookerr.php";
 
 class AuthController extends BaseController
@@ -31,29 +30,26 @@ class AuthController extends BaseController
                 if (!$user->fillUserByUsernameOrEmailAndPassword())
                     throw Bookerr::ValidationError("Verifique se as credenciais estão corretas!");
 
-                $session = new Session();
-                $session->set("usuario-logado", $user->getId());
+                $this->session->set("usuario-logado", $user->getId());
 
                 header("location:.");
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
         } else {
-            $session = new Session();
-
-            if ($session->has("email")) {
-                $this->view->usernameOrEmail = $session->get("email");
-                $session->unset("email");
+            if ($this->session->has("email")) {
+                $this->view->usernameOrEmail = $this->session->get("email");
+                $this->session->unset("email");
             }
 
-            if ($session->has("password")) {
-                $this->view->password = $session->get("password");
-                $session->unset("password");
+            if ($this->session->has("password")) {
+                $this->view->password = $this->session->get("password");
+                $this->session->unset("password");
             }
 
-            if ($session->has("success_msg")) {
-                $this->view->successMsg = $session->get("success_msg");
-                $session->unset("success_msg");
+            if ($this->session->has("success_msg")) {
+                $this->view->successMsg = $this->session->get("success_msg");
+                $this->session->unset("success_msg");
             }
         }
 
@@ -92,10 +88,10 @@ class AuthController extends BaseController
                 if (!$user->save())
                     throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
 
-                $session = new Session();
-                $session->set("email", $email);
-                $session->set("password", $password);
-                $session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
+
+                $this->session->set("email", $email);
+                $this->session->set("password", $password);
+                $this->session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
 
                 header("location:../login");
             } catch (Bookerr $error) {
@@ -110,9 +106,9 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        $session = new Session();
-        $session->unset("is-admin");
-        $session->unset("usuario-logado");
+
+        $this->session->unset("is-admin");
+        $this->session->unset("usuario-logado");
 
         header("location:../login");
     }

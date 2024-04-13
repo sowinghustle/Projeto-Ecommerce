@@ -1,8 +1,11 @@
 <?php
 
+require_once "models/Session.php";
+
 class BaseController
 {
     public $view;
+    public $session;
 
     protected function changeRequestToGET()
     {
@@ -29,23 +32,9 @@ class BaseController
         return $_SERVER['REQUEST_METHOD'] == "DELETE";
     }
 
-    protected function isAdmin()
-    {
-        $session = new Session();
-        $isAdmin = $session->has("is-admin") && $session->get("is-admin");
-
-        if ($isAdmin) {
-            return true;
-        }
-
-        return false;
-    }
-
     protected function isUserLogged()
     {
-        $session = new Session();
-
-        if ($session->has("usuario-logado")) {
+        if ($this->session->has("usuario-logado")) {
             return true;
         }
 
