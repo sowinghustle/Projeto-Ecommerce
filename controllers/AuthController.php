@@ -74,8 +74,6 @@ class AuthController extends BaseController
                 $this->view->username = $username;
                 $this->view->email = $email;
 
-                $user = new User($username, $email, $password);
-
                 if (!$this->stringIsNotEmpty($username))
                     throw Bookerr::ValidationError("Você precisa fornecer um nome de usuário!");
 
@@ -85,9 +83,10 @@ class AuthController extends BaseController
                 if (!$this->stringIsNotEmpty($password))
                     throw Bookerr::ValidationError("Você precisa fornecer uma senha!");
 
+                $user = new User($username, $email, $password);
+
                 if (!$user->save())
                     throw Bookerr::BadRequest("Não foi possível salvar os dados de usuário! Tente novamente mais tarde.");
-
 
                 $this->session->set("email", $email);
                 $this->session->set("password", $password);
