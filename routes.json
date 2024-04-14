@@ -5,6 +5,7 @@
     "/register": "AuthController@register",
     "/signup": "AuthController@register",
     "/logout": "AuthController@logout",
+    "/book": "BookController@view",
     "/books": "BookController@index",
     "/books/new": "BookController@create",
     "/books/update": "BookController@update",
