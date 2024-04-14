@@ -41,7 +41,7 @@ class Book
             $db = new Database();
             $stmt = null;
 
-            if ($this->id == 0) {
+            if (!$this->hasId()) {
                 $stmt = $db->pdo->prepare('CALL stp_create_book(:title, :author, :description, :categories, :price, :user)');
                 $stmt->bindValue(":user", $this->userId, PDO::PARAM_INT);
             } else {
@@ -118,6 +118,11 @@ class Book
         }
 
         return false;
+    }
+
+    public function hasId()
+    {
+        $this->id != 0;
     }
 
     public function getId()
