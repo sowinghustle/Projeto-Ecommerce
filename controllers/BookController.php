@@ -26,11 +26,51 @@ class BookController extends BaseController
         include "views/book/list.php";
     }
 
+    public function view()
+    {
+        $this->view->author = "";
+        $this->view->description = "";
+        $this->view->categories = "";
+        $this->view->price = "";
+
+        $id = $_GET["id"];
+
+        if (isset($id) && !empty($id)) {
+            $book = Book::withId($id);
+
+            try {
+                if (!$book->fillById()) {
+                    $error404title = "Livro não encontrado.";
+                    $error404description = "O livro com código $id não foi encontrado.";
+                    include '404.php';
+                } else {
+                    $this->view->author = $book->getAuthor();
+                    $this->view->description = $book->getDescription();
+                    $this->view->categories = $book->getRawCategories();
+                    $this->view->price = $book->getPrice();
+                    $this->view->bookTitle = $book->getTitle();
+                    $this->view->title = "Book";
+                    include "views/book/view.php";
+                }
+            } catch (Bookerr $error) {
+                $this->session->set("error_msg", "Não foi possível obter o livro requisitado.");
+                header("location:../books");
+            }
+
+            return;
+        }
+
+        $error404title = "Livro não encontrado.";
+        $error404description = "O código do livro não foi fornecido nesta requisição.";
+
+        include '404.php';
+    }
+
     public function create()
     {
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
-        $this->view->title = "";
+        $this->view->bookTitle = "";
         $this->view->author = "";
         $this->view->description = "";
         $this->view->categories = "";
@@ -41,19 +81,19 @@ class BookController extends BaseController
             $book = null;
 
             try {
-                $title = trim($_POST["title"] ?? "");
+                $bookTitle = trim($_POST["title"] ?? "");
                 $author = trim($_POST["author"] ?? "");
                 $description = $_POST["description"] ?? "";
                 $categories = $_POST["categories"] ?? "";
                 $price = $_POST["price"] ?? "";
 
-                $this->view->title = $title;
+                $this->view->bookTitle = $bookTitle;
                 $this->view->author = $author;
                 $this->view->description = $description;
                 $this->view->categories = $categories;
                 $this->view->price = $price;
 
-                if (!$this->stringIsNotEmpty($title))
+                if (!$this->stringIsNotEmpty($bookTitle))
                     throw Bookerr::ValidationError("Você precisa fornecer um título ao livro!");
 
                 if (!$this->stringIsNotEmpty($author))
@@ -69,7 +109,7 @@ class BookController extends BaseController
                     throw Bookerr::ValidationError("Você precisa fornecer um valor válido!");
 
                 $userId = $this->session->get("usuario-logado");
-                $book = new Book($title, $author, $description, $categories, $price, $userId);
+                $book = new Book($bookTitle, $author, $description, $categories, $price, $userId);
 
                 if (!$book->save()) {
                     throw Bookerr::BadRequest("Não foi possível registrar o livro e suas informações! Tente novamente mais tarde.");
@@ -77,7 +117,7 @@ class BookController extends BaseController
 
                 $this->session->set("success_msg", "Livro cadastrado com sucesso!");
 
-                header("location:../books");
+                header("location:../book?id=" . $book->getId());
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
@@ -85,7 +125,7 @@ class BookController extends BaseController
         }
 
         $this->view->title = "Create Book";
-        include "views/book/create.php";
+        include "views/book/create_update.php";
     }
 
     public function update()
@@ -99,7 +139,7 @@ class BookController extends BaseController
         }
 
         $this->view->title = "Update Book";
-        include "views/book/update.php";
+        include "views/book/create_update.php";
     }
 
     public function delete()
