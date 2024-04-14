@@ -9,21 +9,28 @@
   <title>404 - Página não encontrada</title>
 </head>
 
-<body style="overflow: hidden; height: 100vh; display: grid; place-items: center">
+<body>
   <center>
     <h1 style="color: #ff0000; ">404 - Não Encontrado</h1>
     <div class="d-flex justify-center">
       <img src="assets/images/404.gif" alt="404" />
       <img src="assets/images/404_fail.gif" alt="fails" />
     </div>
-    <h2>Desculpa, página não encontrada.</h2>
-    <span>Verifique se a url está correta.</span>
+    <h2><?php echo $error404title ?></h2>
+    <span><?php echo $error404description ?></span>
   </center>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
   <style>
+    body {
+      overflow: hidden;
+      height: 100vh;
+      display: grid;
+      place-items: center
+    }
+
     h1,
     h2 {
       font-family: cursive;
