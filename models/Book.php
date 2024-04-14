@@ -72,6 +72,24 @@ class Book
         return false;
     }
 
+    public function delete(): bool
+    {
+        $id = $this->id;
+
+        try {
+            $db = new Database();
+            $stmt = $db->pdo->prepare("DELETE FROM books WHERE id=:id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            $this->throw_exception();
+        }
+
+        return false;
+    }
+
     public function fillById(): bool
     {
         $id = $this->id;

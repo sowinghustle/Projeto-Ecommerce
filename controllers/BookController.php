@@ -123,14 +123,40 @@ class BookController extends BaseController
 
     public function delete()
     {
-        $this->view->errorMsg = "";
-        $this->view->successMsg = "";
-        $this->ensureIsLogged();
-
         if (!$this->requestIsPOST()) {
             header("location:../books");
-            return;
         }
+
+        $this->ensureIsLogged();
+
+        $id = $_GET["id"];
+
+        if (isset($id) && !empty($id)) {
+            $book = Book::withId($id);
+
+            if (!$book->fillById()) {
+                $this->session->set("error_msg", "O livro com código $id não foi encontrado.");
+                header("location:../books");
+                return;
+            }
+
+            if ($book->getUserId() != $this->getLoggedUserId()) {
+                $this->session->set("error_msg", "Você não tem permissão para excluir este livro.");
+                header("location:../book?id=$id");
+                return;
+            }
+
+            if (!$book->delete()) {
+                $this->session->set("error_msg", "Não foi possível excluir este livro.");
+                header("location:../book?id=$id");
+                return;
+            }
+
+            $this->session->set("success_msg", "Livro " . $book->getTitle() . "#" . $book->getId() . " excluído com sucesso.");
+        }
+
+        header("location:../books");
+        return;
     }
 
     private function validateBook(Book $book)

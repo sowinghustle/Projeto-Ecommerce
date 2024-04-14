@@ -17,13 +17,17 @@ class BaseController
         return $_SERVER['REQUEST_METHOD'] == "POST";
     }
 
+    protected function getLoggedUserId()
+    {
+        if (!$this->isUserLogged())
+            return null;
+
+        return $this->session->get("usuario-logado");
+    }
+
     protected function isUserLogged()
     {
-        if ($this->session->has("usuario-logado")) {
-            return true;
-        }
-
-        return false;
+        return $this->session->has("usuario-logado");
     }
 
     protected function stringIsNotEmpty($value)
