@@ -173,26 +173,26 @@ class BookController extends BaseController
 
             if (!$book->fillById()) {
                 $this->session->set("error-msg", "O livro com código $id não foi encontrado.");
-                header("location:books");
+                header("location:../books");
                 return;
             }
 
             if ($book->getUserId() != $this->getLoggedUserId()) {
                 $this->session->set("error-msg", "Você não tem permissão para excluir este livro.");
-                header("location:books/view?id=$id");
+                header("location:../books/view?id=$id");
                 return;
             }
 
             if (!$book->delete()) {
                 $this->session->set("error-msg", "Não foi possível excluir este livro.");
-                header("location:books/view?id=$id");
+                header("location:../books/view?id=$id");
                 return;
             }
 
             $this->session->set("success-msg", "Livro " . $book->getTitle() . "#" . $book->getId() . " excluído com sucesso.");
         }
 
-        header("location:books");
+        header("location:../books");
         return;
     }
 

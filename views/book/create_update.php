@@ -76,7 +76,8 @@
                             </button>
 
                             <?php if ($this->view->book->hasId()) { ?>
-                                <button type="submit" class="btn btn-danger" formaction="../books/delete" formnovalidate>
+                                <button type="submit" class="btn btn-danger"
+                                    formaction="./delete?id=<?php echo $this->view->book->getId() ?>" formnovalidate>
                                     Excluir
                                 </button>
                             <?php } ?>
