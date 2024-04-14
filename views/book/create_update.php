@@ -1,3 +1,4 @@
+<?php /** @var BookController $this */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,10 +28,20 @@
                             </span>
                         </div>
 
+                        <?php
+                        if (isset($this->view->id)) {
+                            $id = $this->view->id;
+
+                            echo "<div class=\"mb-3\">";
+                            echo "<input name=\"id\" type=\"number\" value=\"$id\">";
+                            echo "</div>";
+                        }
+                        ?>
+
                         <div class="mb-3">
                             <label for="title" class="form-label">Nome do Livro</label>
                             <input name="title" type="text" class="form-control"
-                                value="<?php echo $this->view->title ?>">
+                                value="<?php echo $this->view->bookTitle ?>">
                         </div>
 
                         <div class="mb-3">

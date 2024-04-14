@@ -1,3 +1,4 @@
+<?php /** @var BookController $this */ ?>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -1,3 +1,4 @@
+<?php /** @var AuthController $this */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
