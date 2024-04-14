@@ -31,8 +31,9 @@ class AuthController extends BaseController
                     throw Bookerr::ValidationError("Verifique se as credenciais estão corretas!");
 
                 $this->session->set("usuario-logado", $user->getId());
+                $this->session->set("success-msg", "Seja bem vindo, " . $user->getUsername() . "!");
 
-                header("location:.");
+                header("location:./books");
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
@@ -47,9 +48,9 @@ class AuthController extends BaseController
                 $this->session->unset("password");
             }
 
-            if ($this->session->has("success_msg")) {
-                $this->view->successMsg = $this->session->get("success_msg");
-                $this->session->unset("success_msg");
+            if ($this->session->has("success-msg")) {
+                $this->view->successMsg = $this->session->get("success-msg");
+                $this->session->unset("success-msg");
             }
         }
 
@@ -90,7 +91,7 @@ class AuthController extends BaseController
 
                 $this->session->set("email", $email);
                 $this->session->set("password", $password);
-                $this->session->set("success_msg", "Usuário cadastrado com sucesso! Faça o login.");
+                $this->session->set("success-msg", "Usuário cadastrado com sucesso! Faça o login.");
 
                 header("location:../login");
             } catch (Bookerr $error) {
