@@ -3,6 +3,7 @@
 require_once "BaseController.php";
 require_once "models/Database.php";
 require_once "models/Book.php";
+require_once "models/BookList.php";
 
 class BookController extends BaseController
 {
@@ -10,6 +11,7 @@ class BookController extends BaseController
     {
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
+        $this->view->books = new BookList("");
 
         if ($this->session->has("error-msg")) {
             $this->view->errorMsg = $this->session->get("error-msg");
@@ -20,6 +22,8 @@ class BookController extends BaseController
             $this->view->successMsg = $this->session->get("success-msg");
             $this->session->unset("success-msg");
         }
+
+        // TODO: obter livros
 
         $this->view->title = "Books";
         include "views/book/list.php";
