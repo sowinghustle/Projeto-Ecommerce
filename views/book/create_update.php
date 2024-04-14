@@ -32,8 +32,7 @@
                         </div>
 
                         <?php
-
-                        if ($this->view->book->getId() != 0) {
+                        if ($this->view->book->hasId()) {
                             echo "<div class=\"mb-3\">";
                             echo "<input name=\"id\" type=\"number\" class=\"form-control\" value=\"" . $this->view->book->getId() . "\" readonly>";
                             echo "</div>";
@@ -72,6 +71,8 @@
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            <button type="submit" class="btn btn-danger" formaction="../books/delete"
+                                formnovalidate>Excluir</button>
                         </div>
                     </form>
                 </div>
