@@ -5,9 +5,9 @@
     "/register": "AuthController@register",
     "/signup": "AuthController@register",
     "/logout": "AuthController@logout",
-    "/book": "BookController@view",
     "/books": "BookController@index",
+    "/books/view": "BookController@view",
     "/books/new": "BookController@create",
-    "/books/update": "BookController@update",
+    "/books/edit": "BookController@update",
     "/books/delete": "BookController@delete"
 }

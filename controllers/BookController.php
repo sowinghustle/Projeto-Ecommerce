@@ -50,12 +50,18 @@ class BookController extends BaseController
                         $this->session->unset("error_msg");
                     }
 
+                    if ($this->view->book->getUserId() == $this->getLoggedUserId()) {
+                        $this->view->title = "Update Book";
+                        include "views/book/create_update.php";
+                        return;
+                    }
+
                     $this->view->title = "Book";
                     include "views/book/view.php";
                 }
             } catch (Bookerr $error) {
                 $this->session->set("error_msg", "Não foi possível obter o livro requisitado.");
-                header("location:../books");
+                header("location:books");
             }
 
             return;
@@ -91,7 +97,7 @@ class BookController extends BaseController
 
                 $this->session->set("success_msg", "Livro cadastrado com sucesso!");
 
-                header("location:../book?id=" . $this->view->book->getId());
+                header("location:books/view?id=" . $this->view->book->getId());
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
@@ -104,27 +110,58 @@ class BookController extends BaseController
 
     public function update()
     {
-        $this->view->errorMsg = "";
-        $this->view->successMsg = "";
-        $this->view->book = Book::withNothing();
         $this->ensureIsLogged();
 
-        if ($this->requestIsPOST()) {
+        $id = $_GET["id"];
+
+        if (isset($id) && !empty($id)) {
+            $this->view->errorMsg = "";
+            $this->view->successMsg = "";
+            $this->view->book = Book::withId($id);
+
             try {
+                if (!$this->view->book->fillById()) {
+                    $error404title = "Livro não encontrado.";
+                    $error404description = "O livro com código $id não foi encontrado.";
+                    include '404.php';
+                } else {
+                    if ($this->view->book->getUserId() != $this->getLoggedUserId()) {
+                        $this->session->set("error_msg", "Você não tem permissão para editar este livro.");
+                        header("location:books/view?id=$id");
+                        return;
+                    }
+
+                    if ($this->session->has("success_msg")) {
+                        $this->view->successMsg = $this->session->get("success_msg");
+                        $this->session->unset("success_msg");
+                    }
+
+                    if ($this->session->has("error_msg")) {
+                        $this->view->errorMsg = $this->session->get("error_msg");
+                        $this->session->unset("error_msg");
+                    }
+
+                    $this->view->title = "Update Book";
+                    include "views/book/create_update.php";
+                }
             } catch (Bookerr $error) {
-                $this->view->errorMsg = $error->getMessage();
+                $this->session->set("error_msg", "Não foi possível obter o livro requisitado.");
+                header("location:books");
             }
-        } else {
+
+            return;
         }
 
-        $this->view->title = "Update Book";
-        include "views/book/create_update.php";
+        $error404title = "Livro não encontrado.";
+        $error404description = "O código do livro não foi fornecido nesta requisição.";
+
+        include '404.php';
     }
 
     public function delete()
     {
         if (!$this->requestIsPOST()) {
-            header("location:../books");
+            header("location:books");
         }
 
         $this->ensureIsLogged();
@@ -136,26 +173,26 @@ class BookController extends BaseController
 
             if (!$book->fillById()) {
                 $this->session->set("error_msg", "O livro com código $id não foi encontrado.");
-                header("location:../books");
+                header("location:books");
                 return;
             }
 
             if ($book->getUserId() != $this->getLoggedUserId()) {
                 $this->session->set("error_msg", "Você não tem permissão para excluir este livro.");
-                header("location:../book?id=$id");
+                header("location:books/view?id=$id");
                 return;
             }
 
             if (!$book->delete()) {
                 $this->session->set("error_msg", "Não foi possível excluir este livro.");
-                header("location:../book?id=$id");
+                header("location:books/view?id=$id");
                 return;
             }
 
             $this->session->set("success_msg", "Livro " . $book->getTitle() . "#" . $book->getId() . " excluído com sucesso.");
         }
 
-        header("location:../books");
+        header("location:books");
         return;
     }
 
