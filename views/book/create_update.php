@@ -31,13 +31,13 @@
                             </span>
                         </div>
 
-                        <?php
-                        if ($this->view->book->hasId()) {
-                            echo "<div class=\"mb-3\">";
-                            echo "<input name=\"id\" type=\"number\" class=\"form-control\" value=\"" . $this->view->book->getId() . "\" readonly>";
-                            echo "</div>";
-                        }
-                        ?>
+                        <?php if ($this->view->book->hasId()) { ?>
+                            <div class="mb-3">
+                                <label for="id" class="form-label">Código do Livro</label>
+                                <input name="id" type="number" class="form-control"
+                                    value="<?php echo $this->view->book->getId() ?>" readonly>
+                            </div>
+                        <?php } ?>
 
                         <div class="mb-3">
                             <label for="title" class="form-label">Nome do Livro</label>
@@ -53,12 +53,13 @@
 
                         <div class="mb-3">
                             <label for="description" class="form-label">Descrição do livro</label>
-                            <input name="description" type="text" class="form-control"
-                                value="<?php echo $this->view->book->getDescription() ?>">
+                            <textarea name="description" class="form-control"
+                                rows="5"><?php echo $this->view->book->getDescription() ?></textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label for="categories" class="form-label">Categorias do livro</label>
+                            <label for="categories" class="form-label">Categorias do livro (separados por
+                                vírgula)</label>
                             <input name="categories" type="text" class="form-control"
                                 value="<?php echo $this->view->book->getRawCategories() ?>">
                         </div>
@@ -69,10 +70,14 @@
                                 value="<?php echo $this->view->book->getPrice() ?>">
                         </div>
 
-                        <div class="d-flex justify-content-center">
+                        <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Cadastrar</button>
-                            <button type="submit" class="btn btn-danger" formaction="../books/delete"
-                                formnovalidate>Excluir</button>
+
+                            <?php if ($this->view->book->hasId()) { ?>
+                                <button type="submit" class="btn btn-danger" formaction="../books/delete" formnovalidate>
+                                    Excluir
+                                </button>
+                            <?php } ?>
                         </div>
                     </form>
                 </div>

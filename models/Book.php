@@ -59,7 +59,7 @@ class Book
 
             if ($this->id == 0) {
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                $this->id = $result["id"];
+                $this->id = (int) $result["id"];
             }
 
             if ($this->id != 0) {
@@ -103,7 +103,7 @@ class Book
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($result) {
-                $this->id = $result["id"];
+                $this->id = (int) $result["id"];
                 $this->title = $result["title"];
                 $this->author = $result["author"];
                 $this->description = $result["description"];
@@ -122,7 +122,7 @@ class Book
 
     public function hasId()
     {
-        $this->id != 0;
+        return $this->id != 0;
     }
 
     public function getId()
