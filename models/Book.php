@@ -18,16 +18,21 @@ class Book
         $this->title = $title;
         $this->author = $author;
         $this->description = $description;
-        $this->categories = $categories;
+        $this->setCategories($categories ?? array());
         $this->price = $price ?? 0.00;
         $this->userId = $userId ?? 0;
     }
 
     public static function withId($id): Book
     {
-        $book = new Book("", "", "", "", 0.00, 0);
+        $book = self::withNothing();
         $book->id = $id;
         return $book;
+    }
+
+    public static function withNothing(): Book
+    {
+        return new Book("", "", "", "", 0.00, 0);
     }
 
     public function save()
@@ -47,7 +52,7 @@ class Book
             $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
             $stmt->bindValue(":author", $this->author, PDO::PARAM_STR);
             $stmt->bindValue(":description", $this->description, PDO::PARAM_STR);
-            $stmt->bindValue(":categories", $this->categories, PDO::PARAM_STR);
+            $stmt->bindValue(":categories", $this->getRawCategories(), PDO::PARAM_STR);
             $stmt->bindValue(":price", $this->price, PDO::PARAM_STR);
 
             $stmt->execute();
@@ -86,7 +91,7 @@ class Book
                 $this->description = $result["description"];
                 $this->price = $result["price"];
                 $this->userId = $result["user"];
-                $this->setRawCategories($result["categories"]);
+                $this->setCategories($result["categories"]);
 
                 return true;
             }
@@ -144,12 +149,11 @@ class Book
 
     public function setCategories($newCategories)
     {
-        $this->categories = $newCategories;
-    }
-
-    public function setRawCategories($newCategories)
-    {
-        $this->categories = explode(',', $newCategories);
+        if (is_array($newCategories)) {
+            $this->categories = $newCategories;
+        } else {
+            $this->categories = explode(',', $newCategories);
+        }
     }
 
     public function getPrice()
