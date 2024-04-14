@@ -5,7 +5,7 @@ require_once "models/Session.php";
 class BaseController
 {
     public $view;
-    public $session;
+    public Session $session;
 
     protected function changeRequestToGET()
     {
