@@ -71,7 +71,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <?php echo $this->view->book->hasId() ? "Atualizar" : "Cadastrar" ?>
+                            </button>
 
                             <?php if ($this->view->book->hasId()) { ?>
                                 <button type="submit" class="btn btn-danger" formaction="../books/delete" formnovalidate>
