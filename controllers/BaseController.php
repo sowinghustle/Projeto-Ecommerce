@@ -7,11 +7,6 @@ class BaseController
     public $view;
     public Session $session;
 
-    protected function changeRequestToGET()
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-    }
-
     protected function requestIsGET()
     {
         return $_SERVER['REQUEST_METHOD'] == "GET";
@@ -20,16 +15,6 @@ class BaseController
     protected function requestIsPOST()
     {
         return $_SERVER['REQUEST_METHOD'] == "POST";
-    }
-
-    protected function requestIsPUT()
-    {
-        return $_SERVER['REQUEST_METHOD'] == "PUT";
-    }
-
-    protected function requestIsDELETE()
-    {
-        return $_SERVER['REQUEST_METHOD'] == "DELETE";
     }
 
     protected function isUserLogged()
