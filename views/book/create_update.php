@@ -26,14 +26,16 @@
                             <span class="text-danger">
                                 <?php echo $this->view->errorMsg ?>
                             </span>
+                            <span class="text-success">
+                                <?php echo $this->view->successMsg ?>
+                            </span>
                         </div>
 
                         <?php
-                        if (isset($this->view->id)) {
-                            $id = $this->view->id;
 
+                        if ($this->view->book->getId() != 0) {
                             echo "<div class=\"mb-3\">";
-                            echo "<input name=\"id\" type=\"number\" value=\"$id\">";
+                            echo "<input name=\"id\" type=\"number\" class=\"form-control\" value=\"" . $this->view->book->getId() . "\" readonly>";
                             echo "</div>";
                         }
                         ?>
@@ -41,33 +43,35 @@
                         <div class="mb-3">
                             <label for="title" class="form-label">Nome do Livro</label>
                             <input name="title" type="text" class="form-control"
-                                value="<?php echo $this->view->bookTitle ?>">
+                                value="<?php echo $this->view->book->getTitle() ?>">
                         </div>
 
                         <div class="mb-3">
                             <label for="author" class="form-label">Autor do livro</label>
                             <input name="author" type="text" class="form-control"
-                                value="<?php echo $this->view->author ?>">
+                                value="<?php echo $this->view->book->getAuthor() ?>">
                         </div>
 
                         <div class="mb-3">
                             <label for="description" class="form-label">Descrição do livro</label>
                             <input name="description" type="text" class="form-control"
-                                value="<?php echo $this->view->description ?>">
+                                value="<?php echo $this->view->book->getDescription() ?>">
                         </div>
+
                         <div class="mb-3">
                             <label for="categories" class="form-label">Categorias do livro</label>
                             <input name="categories" type="text" class="form-control"
-                                value="<?php echo $this->view->categories ?>">
+                                value="<?php echo $this->view->book->getRawCategories() ?>">
                         </div>
+
                         <div class="mb-3">
                             <label for="price" class="form-label">Valor do livro</label>
                             <input name="price" type="number" step="0.01" min="0.01" class="form-control"
-                                value="<?php echo $this->view->price ?>">
+                                value="<?php echo $this->view->book->getPrice() ?>">
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
                         </div>
                     </form>
                 </div>

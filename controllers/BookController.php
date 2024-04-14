@@ -6,7 +6,6 @@ require_once "models/Book.php";
 
 class BookController extends BaseController
 {
-
     public function index()
     {
         $this->view->errorMsg = "";
@@ -28,27 +27,29 @@ class BookController extends BaseController
 
     public function view()
     {
-        $this->view->author = "";
-        $this->view->description = "";
-        $this->view->categories = "";
-        $this->view->price = "";
-
         $id = $_GET["id"];
 
         if (isset($id) && !empty($id)) {
-            $book = Book::withId($id);
+            $this->view->errorMsg = "";
+            $this->view->successMsg = "";
+            $this->view->book = Book::withId($id);
 
             try {
-                if (!$book->fillById()) {
+                if (!$this->view->book->fillById()) {
                     $error404title = "Livro não encontrado.";
                     $error404description = "O livro com código $id não foi encontrado.";
                     include '404.php';
                 } else {
-                    $this->view->author = $book->getAuthor();
-                    $this->view->description = $book->getDescription();
-                    $this->view->categories = $book->getRawCategories();
-                    $this->view->price = $book->getPrice();
-                    $this->view->bookTitle = $book->getTitle();
+                    if ($this->session->has("success_msg")) {
+                        $this->view->successMsg = $this->session->get("success_msg");
+                        $this->session->unset("success_msg");
+                    }
+
+                    if ($this->session->has("error_msg")) {
+                        $this->view->errorMsg = $this->session->get("error_msg");
+                        $this->session->unset("error_msg");
+                    }
+
                     $this->view->title = "Book";
                     include "views/book/view.php";
                 }
@@ -70,54 +71,27 @@ class BookController extends BaseController
     {
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
-        $this->view->bookTitle = "";
-        $this->view->author = "";
-        $this->view->description = "";
-        $this->view->categories = "";
-        $this->view->price = "";
+        $this->view->book = Book::withNothing();
         $this->ensureIsLogged();
 
         if ($this->requestIsPOST()) {
-            $book = null;
-
             try {
                 $bookTitle = trim($_POST["title"] ?? "");
                 $author = trim($_POST["author"] ?? "");
                 $description = $_POST["description"] ?? "";
                 $categories = $_POST["categories"] ?? "";
                 $price = $_POST["price"] ?? "";
-
-                $this->view->bookTitle = $bookTitle;
-                $this->view->author = $author;
-                $this->view->description = $description;
-                $this->view->categories = $categories;
-                $this->view->price = $price;
-
-                if (!$this->stringIsNotEmpty($bookTitle))
-                    throw Bookerr::ValidationError("Você precisa fornecer um título ao livro!");
-
-                if (!$this->stringIsNotEmpty($author))
-                    throw Bookerr::ValidationError("Você precisa fornecer um nome do autor!");
-
-                if (!$this->stringIsNotEmpty($description))
-                    throw Bookerr::ValidationError("Você precisa fornecer uma descrição!");
-
-                if (!$this->stringIsNotEmpty($categories))
-                    throw Bookerr::ValidationError("Você precisa fornecer uma categoria!");
-
-                if ($price == null || $price <= 0)
-                    throw Bookerr::ValidationError("Você precisa fornecer um valor válido!");
-
                 $userId = $this->session->get("usuario-logado");
-                $book = new Book($bookTitle, $author, $description, $categories, $price, $userId);
 
-                if (!$book->save()) {
+                $this->view->book = new Book($bookTitle, $author, $description, $categories, $price, $userId);
+                $this->validateBook($this->view->book);
+
+                if (!$this->view->book->save())
                     throw Bookerr::BadRequest("Não foi possível registrar o livro e suas informações! Tente novamente mais tarde.");
-                }
 
                 $this->session->set("success_msg", "Livro cadastrado com sucesso!");
 
-                header("location:../book?id=" . $book->getId());
+                header("location:../book?id=" . $this->view->book->getId());
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
@@ -132,9 +106,14 @@ class BookController extends BaseController
     {
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
+        $this->view->book = Book::withNothing();
         $this->ensureIsLogged();
 
         if ($this->requestIsPOST()) {
+            try {
+            } catch (Bookerr $error) {
+                $this->view->errorMsg = $error->getMessage();
+            }
         } else {
         }
 
@@ -154,10 +133,28 @@ class BookController extends BaseController
         }
     }
 
+    private function validateBook(Book $book)
+    {
+        if (!$this->stringIsNotEmpty($book->getTitle()))
+            throw Bookerr::ValidationError("Você precisa fornecer um título ao livro!");
+
+        if (!$this->stringIsNotEmpty($book->getAuthor()))
+            throw Bookerr::ValidationError("Você precisa fornecer um nome do autor!");
+
+        if (!$this->stringIsNotEmpty($book->getDescription()))
+            throw Bookerr::ValidationError("Você precisa fornecer uma descrição!");
+
+        if (count($book->getCategories()) == 0)
+            throw Bookerr::ValidationError("Você precisa fornecer uma categoria!");
+
+        if ($book->getPrice() == null || $book->getPrice() <= 0)
+            throw Bookerr::ValidationError("Você precisa fornecer um valor válido!");
+    }
+
     private function ensureIsLogged()
     {
         if (!$this->isUserLogged()) {
-            header("location:../books");
+            header("location:../login");
             return;
         }
     }
