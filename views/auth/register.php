@@ -46,8 +46,9 @@
                                 autocomplete="current-password" value="">
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                            <a href="/login" class="link-underline-secondary">Já tem uma conta?</a>
                         </div>
                     </form>
                 </div>

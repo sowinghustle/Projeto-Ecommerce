@@ -43,8 +43,9 @@
                                 value="<?php echo $this->view->password ?>">
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <button type="submit" class="btn btn-primary">Logar</button>
+                            <a href="/register" class="link-underline-secondary">Criar uma conta</a>
                         </div>
                     </form>
                 </div>
