@@ -34,8 +34,7 @@ class Session
 
     private static function start()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE)
-            session_start();
+        session_start();
     }
 
     private static function _sessionHas($key)
