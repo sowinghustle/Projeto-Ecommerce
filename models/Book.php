@@ -19,13 +19,15 @@ class Book
         $this->author = $author;
         $this->description = $description;
         $this->categories = $categories;
-        $this->price = $price;
-        $this->userId = $userId;
+        $this->price = $price ?? 0.00;
+        $this->userId = $userId ?? 0;
     }
 
     public static function withId($id): Book
     {
-        return new Book("", "", "", "", 0.00, $id);
+        $book = new Book("", "", "", "", 0.00, 0);
+        $book->id = $id;
+        return $book;
     }
 
     public function save()
@@ -59,7 +61,6 @@ class Book
                 return true;
             }
         } catch (Exception $e) {
-            echo $e;
             $this->throw_exception();
         }
 
@@ -85,7 +86,7 @@ class Book
                 $this->description = $result["description"];
                 $this->price = $result["price"];
                 $this->userId = $result["user"];
-                $this->setCategories($result["categories"]);
+                $this->setRawCategories($result["categories"]);
 
                 return true;
             }
@@ -94,6 +95,11 @@ class Book
         }
 
         return false;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getTitle()
@@ -128,11 +134,22 @@ class Book
 
     public function getCategories()
     {
-        return explode(',', $this->categories);
+        return $this->categories;
     }
+
+    public function getRawCategories()
+    {
+        return implode(',', $this->categories);
+    }
+
     public function setCategories($newCategories)
     {
-        $this->categories = implode(',', $newCategories);
+        $this->categories = $newCategories;
+    }
+
+    public function setRawCategories($newCategories)
+    {
+        $this->categories = explode(',', $newCategories);
     }
 
     public function getPrice()
