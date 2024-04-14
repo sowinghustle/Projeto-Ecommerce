@@ -38,7 +38,7 @@ INSERT INTO books (
 ),
 (
     "The Mysterious Island",
-    "Júlio Verne",
+    "Julio Verne",
     "science fiction,adventure,scientific novel",
     27.93,
     "Depois de sequestrar um balao de um campo confederado, um grupo de cinco abolicionistas americanos cai das nuvens em uma ilha vulcanica desconhecida no oceano Pacifico. Agora, precisam lutar pela propria sobrevivencia. Juntos eles se empenham em construir uma colonia do zero, mas a ilha de recursos abundantes tem segredos inimaginaveis.",
