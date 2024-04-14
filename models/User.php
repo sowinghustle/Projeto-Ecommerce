@@ -144,6 +144,11 @@ class User
         $this->email = $newEmail;
     }
 
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
     public function changePassword($newPassword)
     {
         // $this->password = Hash::make($newPassword);
