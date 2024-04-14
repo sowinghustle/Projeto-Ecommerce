@@ -1,7 +1,12 @@
 <?php
 
+
 require_once "config.php";
 require_once "models/Session.php";
+
+if (PRODUCTION == true) {
+    error_reporting(0);
+}
 
 // redireciona todas as requisições que tem assets no meio para a pasta de assets
 if (strpos($_SERVER['REQUEST_URI'], '/assets/') !== false) {
@@ -70,7 +75,10 @@ if ($rotaEncontrada) {
         // TODO: include '500.html'
     }
 } else {
-    include '404.html';
+    $error404title = "Desculpa, página não encontrada.";
+    $error404description = "Verifique se a url está correta.";
+
+    include '404.php';
 }
 
 function getBaseUrl()
