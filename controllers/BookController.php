@@ -65,7 +65,7 @@ class BookController extends BaseController
                 }
             } catch (Bookerr $error) {
                 $this->session->set("error-msg", "Não foi possível obter o livro requisitado.");
-                header("location:books");
+                header("location:../books");
             }
 
             return;
@@ -101,7 +101,7 @@ class BookController extends BaseController
 
                 $this->session->set("success-msg", "Livro cadastrado com sucesso!");
 
-                header("location:books/view?id=" . $this->view->book->getId());
+                header("location:../books/view?id=" . $this->view->book->getId());
             } catch (Bookerr $error) {
                 $this->view->errorMsg = $error->getMessage();
             }
@@ -131,7 +131,7 @@ class BookController extends BaseController
                 } else {
                     if ($this->view->book->getUserId() != $this->getLoggedUserId()) {
                         $this->session->set("error-msg", "Você não tem permissão para editar este livro.");
-                        header("location:books/view?id=$id");
+                        header("location:../books/view?id=$id");
                         return;
                     }
 
@@ -150,7 +150,7 @@ class BookController extends BaseController
                 }
             } catch (Bookerr $error) {
                 $this->session->set("error-msg", "Não foi possível obter o livro requisitado.");
-                header("location:books");
+                header("location:../books");
             }
 
             return;
@@ -165,7 +165,7 @@ class BookController extends BaseController
     public function delete()
     {
         if (!$this->requestIsPOST()) {
-            header("location:books");
+            header("location:../books");
         }
 
         $this->ensureIsLogged();
