@@ -106,11 +106,8 @@ class AuthController extends BaseController
 
     public function logout()
     {
-
-        $this->session->unset("is-admin");
         $this->session->unset("usuario-logado");
-
-        header("location:../login");
+        header("location:../");
     }
 
     private function setErrorIfUserExists($user)

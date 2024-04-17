@@ -35,6 +35,7 @@
                 <label for="search" class="form-label">Pesquisa</label>
                 <input id="search" name="search" type="text" class="form-control" value="<?php echo $this->view->search ?>" style="max-width:450px;width:100%;" />
                 <button id="btn-search" class="btn btn-primary mt-2" style="max-width:450px;width:100%;">pesquisar</button>
+                <a href="../" class="mt-4">Ir para a Home</a>
             </div>
 
             <section>

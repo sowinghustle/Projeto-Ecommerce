@@ -7,6 +7,7 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        header("location:./books");
+        $this->view->title = "Home";
+        include "views/home/index.php";
     }
 }
