@@ -43,11 +43,11 @@
                         </div>
                     <?php } else { ?>
                         <div class="mb-3 w-100">
-                            <a href="./login" class="w-100 btn btn-primary">Fazer Login</a>
+                            <a href="./login" class="w-100 btn btn-success">Fazer Login</a>
                         </div>
 
                         <div class="mb-3 w-100">
-                            <a href="./register" class="w-100 btn btn-primary">Registrar</a>
+                            <a href="./register" class="w-100 btn btn-success">Registrar</a>
                         </div>
                     <?php } ?>
                 </div>
