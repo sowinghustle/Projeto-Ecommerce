@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3 w-100">
-                        <a href="./books" class="w-100 btn btn-primary">Ver a Lista de Livros</a>
+                        <a href="./books" class="w-100 btn btn-primary">Lista de Livros</a>
                     </div>
 
                     <?php if ($this->session->has("usuario-logado")) { ?>
@@ -35,11 +35,11 @@
                         </div>
 
                         <div class="mb-3 w-100">
-                            <a href="./logout" class="w-100 btn btn-primary">Sair da Conta</a>
+                            <a href="./profile" class="w-100 btn btn-secondary">Perfil</a>
                         </div>
 
                         <div class="mb-3 w-100">
-                            <a href="./profile" class="w-100 btn btn-primary">Perfil</a>
+                            <a href="./logout" class="w-100 btn btn-danger">Sair da Conta</a>
                         </div>
                     <?php } else { ?>
                         <div class="mb-3 w-100">
