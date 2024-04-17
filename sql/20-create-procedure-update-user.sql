@@ -15,8 +15,8 @@ BEGIN
     START TRANSACTION;
 
     UPDATE users SET 
-        username=IFNULL(p_username, username),
-        email=IFNULL(p_email, email),
+        username=replace(IFNULL(p_username, username), '"', ""),
+        email=replace(IFNULL(p_email, email), '"', ""),
         password=IFNULL(p_password, password)
     WHERE id=p_id;
 
