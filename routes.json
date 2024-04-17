@@ -1,5 +1,6 @@
 {
     "/": "HomeController@index",
+    "/profile": "HomeController@profile",
     "/login": "AuthController@login",
     "/signin": "AuthController@login",
     "/register": "AuthController@register",

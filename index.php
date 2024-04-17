@@ -73,6 +73,8 @@ if ($rotaEncontrada) {
         $controller->$nomeDoMetodo(...array_slice($correspondentes, 1));
     } catch (Exception $ex) {
         // TODO: include '500.html'
+        $error = $ex->getMessage();
+        echo "Fatal error: $error<br/><a href='#' onclick='javascript:window.history.go(-1)'>Voltar</a>";
     }
 } else {
     $error404title = "Desculpa, página não encontrada.";

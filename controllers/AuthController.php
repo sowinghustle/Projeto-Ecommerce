@@ -48,6 +48,11 @@ class AuthController extends BaseController
                 $this->session->unset("password");
             }
 
+            if ($this->session->has("error-msg")) {
+                $this->view->errorMsg = $this->session->get("error-msg");
+                $this->session->unset("error-msg");
+            }
+
             if ($this->session->has("success-msg")) {
                 $this->view->successMsg = $this->session->get("success-msg");
                 $this->session->unset("success-msg");

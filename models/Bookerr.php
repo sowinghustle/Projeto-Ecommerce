@@ -36,6 +36,6 @@ class Bookerr extends Exception
 
     public static function Exception($message): Bookerr
     {
-        return new Bookerr(self::$EXCEPTION_TYPE, "Sorry, something went wrong. Try again later!", 500);
+        return new Bookerr(self::$EXCEPTION_TYPE, "Desculpe, algo deu errado. Tente novamente mais tarde.", 500);
     }
 }

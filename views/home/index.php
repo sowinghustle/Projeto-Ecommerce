@@ -33,6 +33,10 @@
                         <div class="mb-3 w-100">
                             <a href="./logout" class="w-100 btn btn-primary">Sair da Conta</a>
                         </div>
+
+                        <div class="mb-3 w-100">
+                            <a href="./profile" class="w-100 btn btn-primary">Perfil</a>
+                        </div>
                     <?php } else { ?>
                         <div class="mb-3 w-100">
                             <a href="./login" class="w-100 btn btn-primary">Fazer Login</a>

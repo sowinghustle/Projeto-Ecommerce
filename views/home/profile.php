@@ -1,6 +1,6 @@
 <?php
 
-/** @var AuthController $this */ ?>
+/** @var HomeController $this */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,29 +25,33 @@
                 <div class="card-body">
                     <form method="POST">
                         <div class="mb-2 d-flex justify-content-center">
+                            <span class="text-success">
+                                <?php echo $this->view->successMsg ?>
+                            </span>
+
                             <span class="text-danger">
                                 <?php echo $this->view->errorMsg ?>
                             </span>
                         </div>
 
                         <div class="mb-3">
-                            <label for="username" class="form-label">Usuário</label>
-                            <input name="username" type="username" class="form-control" id="InputUsername1" value="<?php echo $this->view->username ?>" autocomplete="username">
-                        </div>
-
-                        <div class="mb-3">
                             <label for="email" class="form-label">E-Mail</label>
-                            <input name="email" type="email" class="form-control" id="InputEmail1" value="<?php echo $this->view->email ?>" autocomplete="email">
+                            <input name="email" type="email" class="form-control" value="<?php echo $this->view->email ?>" readonly>
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">Senha</label>
-                            <input name="password" type="password" class="form-control" id="InputPassword1" autocomplete="current-password" value="">
+                            <label for="username" class="form-label">Usuário</label>
+                            <input name="username" type="username" class="form-control" value="<?php echo $this->view->username ?>" autocomplete="username">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Nova Senha (*deixe vazio para permanecer com a mesma senha)</label>
+                            <input name="password" type="password" class="form-control" autocomplete="current-password" value="">
                         </div>
 
                         <div class="d-flex justify-content-center align-items-center gap-2">
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
-                            <a href="/login" class="link-underline-secondary">Já tem uma conta?</a>
+                            <button type="submit" class="btn btn-primary" formaction="./profile">Atualizar</button>
+                            <button type="submit" class="btn btn-danger" formaction="./profile?delete=true">Excluir Conta</button>
                         </div>
                     </form>
                 </div>

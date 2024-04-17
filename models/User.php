@@ -85,6 +85,21 @@ class User
         return false;
     }
 
+    public function delete()
+    {
+        $id = $this->id;
+
+        try {
+            $db = new Database();
+            $stmt = $db->pdo->prepare("CALL stp_delete_user(:id)");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (Exception $e) {
+            var_dump($e);
+            $this->throw_exception();
+        }
+    }
+
     public function save()
     {
         try {

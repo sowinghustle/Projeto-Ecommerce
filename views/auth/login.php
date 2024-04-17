@@ -24,7 +24,7 @@
             <div class="card text-start h-75 w-50">
                 <div class="card-body">
                     <form method="POST">
-                        <div class="mb-2">
+                        <div class="mb-2 d-flex justify-content-center">
                             <span class="text-danger">
                                 <?php echo $this->view->errorMsg ?>
                             </span>
