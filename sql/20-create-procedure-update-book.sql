@@ -6,8 +6,7 @@ CREATE PROCEDURE stp_update_book(
     p_author VARCHAR(255),
     p_description TEXT,
     p_categories VARCHAR(255),
-    p_price DECIMAL(10, 2),
-    p_user INT
+    p_price DECIMAL(10, 2)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION

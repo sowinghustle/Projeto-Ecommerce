@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" formaction="./edit?id=<?php echo $this->view->book->getId() ?>">
                                 <?php echo $this->view->book->hasId() ? "Atualizar" : "Cadastrar" ?>
                             </button>
 

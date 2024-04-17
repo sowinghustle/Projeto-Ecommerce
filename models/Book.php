@@ -46,7 +46,7 @@ class Book
                 $stmt = $db->pdo->prepare('CALL stp_create_book(:title, :author, :description, :categories, :price, :user)');
                 $stmt->bindValue(":user", $this->userId, PDO::PARAM_INT);
             } else {
-                $stmt = $db->pdo->prepare('CALL stp_update_book(:id, :title, :description, :categories, :price)');
+                $stmt = $db->pdo->prepare('CALL stp_update_book(:id, :title, :author, :description, :categories, :price)');
                 $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
             }
 
@@ -67,6 +67,7 @@ class Book
                 return true;
             }
         } catch (Exception $e) {
+            var_dump($e);
             $this->throw_exception();
         }
 

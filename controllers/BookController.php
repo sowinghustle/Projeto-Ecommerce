@@ -150,6 +150,29 @@ class BookController extends BaseController
                         $this->session->unset("error-msg");
                     }
 
+                    if ($this->requestIsPOST()) {
+                        try {
+                            $bookTitle = trim($_POST["title"] ?? "");
+                            $author = trim($_POST["author"] ?? "");
+                            $description = $_POST["description"] ?? "";
+                            $categories = $_POST["categories"] ?? "";
+                            $price = $_POST["price"] ?? "";
+                            $userId = $this->session->get("usuario-logado");
+
+                            $this->view->book = new Book($bookTitle, $author, $description, $categories, $price, $userId, $id);
+                            $this->validateBook($this->view->book);
+
+                            if (!$this->view->book->save())
+                                throw Bookerr::BadRequest("Não foi possível registrar o livro e suas informações! Tente novamente mais tarde.");
+
+                            $this->session->set("success-msg", "Livro atualizado com sucesso!");
+
+                            header("location:../books/view?id=" . $this->view->book->getId());
+                        } catch (Bookerr $error) {
+                            $this->view->errorMsg = $error->getMessage();
+                        }
+                    }
+
                     $this->view->title = "Atualizar Livro";
                     include "views/book/create_update.php";
                 }
