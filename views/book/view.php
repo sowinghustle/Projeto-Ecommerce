@@ -20,7 +20,7 @@
     </h1>
 
     <div class="container">
-        <div class="main d-flex justify-content-center mt-4">
+        <div class="main d-flex flex-column align-items-center justify-content-center mt-4">
             <div class="card text-start h-75 w-50">
                 <div class="card-body">
                     <form>
@@ -64,8 +64,11 @@
                     </form>
                 </div>
             </div>
+
+            <a href="../books" class="mt-4">Voltar para a listagem de livros</a>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
 

@@ -30,7 +30,7 @@ class BookController extends BaseController
             $this->view->errorMsg = "Ocorreu um erro ao tentar retornar os livros.";
         }
 
-        $this->view->title = "Books";
+        $this->view->title = "Livros";
         include "views/book/list.php";
     }
 
@@ -60,12 +60,12 @@ class BookController extends BaseController
                     }
 
                     if ($this->view->book->getUserId() == $this->getLoggedUserId()) {
-                        $this->view->title = "Update Book";
+                        $this->view->title = "Atualizar Livro";
                         include "views/book/create_update.php";
                         return;
                     }
 
-                    $this->view->title = "Book";
+                    $this->view->title = "Comprar Livro";
                     include "views/book/view.php";
                 }
             } catch (Bookerr $error) {
@@ -113,7 +113,7 @@ class BookController extends BaseController
         } else {
         }
 
-        $this->view->title = "Create Book";
+        $this->view->title = "Registrar Livro";
         include "views/book/create_update.php";
     }
 
@@ -150,7 +150,7 @@ class BookController extends BaseController
                         $this->session->unset("error-msg");
                     }
 
-                    $this->view->title = "Update Book";
+                    $this->view->title = "Atualizar Livro";
                     include "views/book/create_update.php";
                 }
             } catch (Bookerr $error) {
