@@ -30,9 +30,23 @@
             </span>
         </div>
 
-        <div class="main d-flex justify-content-center mt-4">
+        <div class="main d-flex flex-column align-items-center justify-content-center mt-4">
+            <div class="mb-5 w-100 d-flex flex-column align-items-center">
+                <label for="search" class="form-label">Pesquisa</label>
+                <input id="search" name="search" type="text" class="form-control" value="<?php echo $this->view->search ?>" style="max-width:450px;width:100%;" />
+                <button id="btn-search" class="btn btn-primary mt-2" style="max-width:450px;width:100%;">pesquisar</button>
+            </div>
+
             <section>
-                <?php foreach ($this->view->bookList->getBooks() as $book) { ?>
+                <?php
+                $books = $this->view->bookList->getBooks();
+
+                if (empty($books)) { ?>
+                    <span>Nenhum livro foi encontrado!</span>
+                <?php }
+
+                foreach ($books as $book) {
+                ?>
                     <div class="card mb-4" style="width:420px;">
                         <img src="<?php echo $book->getImageSource() ?>" class="card-img-top" style="height:200px;">
 
@@ -73,6 +87,24 @@
     </div>
 
     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script>
+        const inputSearch = document.getElementById("search");
+        const btnSearch = document.getElementById("btn-search");
+
+        function search(value) {
+            window.location.href = "../books?search=" + value;
+        }
+
+        inputSearch.addEventListener("keyup", ev => {
+            if (ev.key === "Enter" || ev.keyCode === 13) {
+                search(inputSearch.value);
+            }
+        });
+
+        btnSearch.addEventListener("click", ev => {
+            search(inputSearch.value);
+        });
+    </script>
 </body>
 
 </html>

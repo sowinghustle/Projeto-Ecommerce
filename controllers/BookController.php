@@ -9,11 +9,10 @@ class BookController extends BaseController
 {
     public function index()
     {
-        $search = $_GET["search"] ?? "";
-
+        $this->view->search = $_GET["search"] ?? "";
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
-        $this->view->bookList = new BookList($search);
+        $this->view->bookList = new BookList($this->view->search);
 
         if ($this->session->has("error-msg")) {
             $this->view->errorMsg = $this->session->get("error-msg");
