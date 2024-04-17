@@ -10,7 +10,7 @@ services:
     environment:
       MYSQL_DATABASE: ecommerce-db
       MYSQL_USER: user
-      MYSQL_PASSWORD: you_dont_deserve_to_live
+      MYSQL_PASSWORD: unsafe_password
       MYSQL_RANDOM_ROOT_PASSWORD: true
     networks:
       - just_dance
@@ -23,7 +23,7 @@ services:
     environment:
       PMA_HOST: ecommerce-db
       PMA_USER: user
-      PMA_PASSWORD: you_dont_deserve_to_live
+      PMA_PASSWORD: unsafe_password
     depends_on:
       - ecommerce-db
     networks:
