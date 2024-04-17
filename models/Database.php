@@ -14,15 +14,4 @@ class Database
         $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
-
-    public function prepareAndExecute($query, $params = null)
-    {
-        if (is_null($params)) {
-            $params = array();
-        }
-
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-        return $stmt;
-    }
 }

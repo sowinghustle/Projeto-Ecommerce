@@ -23,7 +23,15 @@ class BookController extends BaseController
             $this->session->unset("success-msg");
         }
 
-        // TODO: obter livros
+        try {
+            if ($this->view->books->fillBySearchResults() == true) {
+                $this->view->books->getBooks();
+            } else {
+                echo "Nenhum resultado em livros.";
+            }
+        } catch (Bookerr $error) {
+            $this->view->errorMsg = "Ocorreu um erro ao tentar retornar os livros.";
+        }
 
         $this->view->title = "Books";
         include "views/book/list.php";

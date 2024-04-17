@@ -4,4 +4,4 @@ CREATE TABLE users (
     email VARCHAR(200) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     PRIMARY KEY (id)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;

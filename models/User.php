@@ -158,6 +158,6 @@ class User
 
     private function throw_exception()
     {
-        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
+        throw Bookerr::Exception("Desculpe, ocorreu um erro e não foi possível completar a requisição!");
     }
 }

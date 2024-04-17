@@ -2,9 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --Nav: #5C6F68;
-  --Header: #2f2f2f;
-  /*--Background: #585B56;*/
+  --Nav: #6b9686;
+  --Header: #868686;
   --Background: #f1f1f1;
 
   --PrimaryButtonColor: #AC80A0;
@@ -12,8 +11,8 @@
 
   --InputFocusColor: #f54703;
 
-  --FontPrimaryColor: #EFF1ED;
-  --FontSecondaryColor: #636363;
+  --FontPrimaryColor: #202020;
+  --FontSecondaryColor: #b4b4b4;
 }
 
 html {

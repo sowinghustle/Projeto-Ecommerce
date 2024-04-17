@@ -39,15 +39,21 @@ class BookList
 
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories, b.price, b.user as userId FROM books b WHERE IF (empty(:search), true, CONCAT(\"%\", b.title, \"%\", b.author, \"%\", b.description, \"%\") like :search)");
+            $stmt = $db->pdo->prepare('CALL stp_search_books("")');
             $stmt->bindValue(":search", $search, PDO::PARAM_STR);
             $stmt->execute();
+            $rawBooks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $books = $stmt->fetchAll(PDO::FETCH_CLASS, "Book");
+            $this->books = [];
 
-            $this->books = $books;
+            foreach ($rawBooks as $rawBook) {
+                $book = new Book($rawBook["title"], $rawBook["author"], $rawBook["description"], $rawBook["categories"], $rawBook["price"], $rawBook["userId"], $rawBook["id"]);
+                array_push($this->books, $book);
+            }
+
             return true;
         } catch (Exception $e) {
+            echo $e->getMessage();
             $this->throw_exception();
         }
 
@@ -76,6 +82,6 @@ class BookList
 
     private function throw_exception()
     {
-        throw Bookerr::Exception("Sorry, something went wrong, and was not possible to proccess your request!");
+        throw Bookerr::Exception("Desculpe, ocorreu um erro e não foi possível completar a requisição!");
     }
 }
