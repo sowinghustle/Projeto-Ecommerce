@@ -105,7 +105,7 @@ class AuthController extends BaseController
             }
         }
 
-        $this->view->title = "Create account";
+        $this->view->title = "Criar uma conta";
         include "views/auth/register.php";
     }
 
