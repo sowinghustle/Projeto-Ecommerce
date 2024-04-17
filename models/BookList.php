@@ -33,13 +33,13 @@ class BookList
         return false;
     }
 
-    public function fillBySearchResults(): bool
+    public function fillBySearchResults()
     {
         $search = $this->search;
 
         try {
             $db = new Database();
-            $stmt = $db->pdo->prepare('CALL stp_search_books("")');
+            $stmt = $db->pdo->prepare('CALL stp_search_books(:search)');
             $stmt->bindValue(":search", $search, PDO::PARAM_STR);
             $stmt->execute();
             $rawBooks = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -48,16 +48,11 @@ class BookList
 
             foreach ($rawBooks as $rawBook) {
                 $book = new Book($rawBook["title"], $rawBook["author"], $rawBook["description"], $rawBook["categories"], $rawBook["price"], $rawBook["userId"], $rawBook["id"]);
-                array_push($this->books, $book);
+                $this->addBook($book);
             }
-
-            return true;
         } catch (Exception $e) {
-            echo $e->getMessage();
             $this->throw_exception();
         }
-
-        return false;
     }
 
     public function addBook($book)

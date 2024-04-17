@@ -1,4 +1,6 @@
-<?php /** @var BookController $this */ ?>
+<?php
+
+/** @var BookController $this */ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,46 +35,38 @@
 
                         <div class="mb-3">
                             <label for="title" class="form-label">Nome do Livro</label>
-                            <input name="title" type="text" class="form-control"
-                                value="<?php echo $this->view->book->getTitle() ?>" readonly />
+                            <input name="title" type="text" class="form-control" value="<?php echo $this->view->book->getTitle() ?>" readonly />
                         </div>
 
                         <div class="mb-3">
                             <label for="author" class="form-label">Autor do livro</label>
-                            <input name="author" type="text" class="form-control"
-                                value="<?php echo $this->view->book->getAuthor() ?>" readonly />
+                            <input name="author" type="text" class="form-control" value="<?php echo $this->view->book->getAuthor() ?>" readonly />
                         </div>
 
                         <div class="mb-3">
                             <label for="description" class="form-label">Descrição do livro</label>
-                            <input name="description" type="text" class="form-control"
-                                value="<?php echo $this->view->book->getDescription() ?>" readonly />
+                            <input name="description" type="text" class="form-control" value="<?php echo $this->view->book->getDescription() ?>" readonly />
                         </div>
 
                         <div class="mb-3">
                             <label for="categories" class="form-label">Categorias do livro</label>
-                            <input name="categories" type="text" class="form-control"
-                                value="<?php echo $this->view->book->getRawCategories() ?>" readonly />
+                            <input name="categories" type="text" class="form-control" value="<?php echo $this->view->book->getRawCategories() ?>" readonly />
                         </div>
 
                         <div class="mb-3">
                             <label for="price" class="form-label">Valor do livro</label>
-                            <input name="price" type="number" step="0.01" min="0.01" class="form-control"
-                                value="<?php echo $this->view->book->getPrice() ?>" readonly />
+                            <input name="price" type="number" step="0.01" min="0.01" class="form-control" value="<?php echo $this->view->book->getPrice() ?>" readonly />
                         </div>
 
                         <div class="mb-3">
                             <input type="button" class="btn btn-primary" value="Comprar" />
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
 
 </html>

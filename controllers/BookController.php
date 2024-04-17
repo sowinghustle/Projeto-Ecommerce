@@ -9,9 +9,11 @@ class BookController extends BaseController
 {
     public function index()
     {
+        $search = $_GET["search"] ?? "";
+
         $this->view->errorMsg = "";
         $this->view->successMsg = "";
-        $this->view->books = new BookList("");
+        $this->view->bookList = new BookList($search);
 
         if ($this->session->has("error-msg")) {
             $this->view->errorMsg = $this->session->get("error-msg");
@@ -24,11 +26,7 @@ class BookController extends BaseController
         }
 
         try {
-            if ($this->view->books->fillBySearchResults() == true) {
-                $this->view->books->getBooks();
-            } else {
-                echo "Nenhum resultado em livros.";
-            }
+            $this->view->bookList->fillBySearchResults();
         } catch (Bookerr $error) {
             $this->view->errorMsg = "Ocorreu um erro ao tentar retornar os livros.";
         }

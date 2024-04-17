@@ -171,6 +171,11 @@ class Book
         return implode(',', $this->categories);
     }
 
+    public function getImageSource()
+    {
+        return "https://m.media-amazon.com/images/I/71kEvJKILlL._AC_UF1000,1000_QL80_.jpg";
+    }
+
     public function setCategories($newCategories)
     {
         if (is_array($newCategories)) {
