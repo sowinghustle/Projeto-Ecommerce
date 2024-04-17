@@ -14,7 +14,7 @@ BEGIN
     START TRANSACTION;
 
     INSERT INTO users (username, email, password)
-    VALUES (p_username, p_email, p_password);
+    VALUES (replace(p_username, '"', ""), replace(p_email, '"', ""), p_password);
 
     SELECT MAX(id) as id FROM users;
 

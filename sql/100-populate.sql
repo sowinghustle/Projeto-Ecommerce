@@ -25,7 +25,7 @@ INSERT INTO books (
     "Jamie Chan",
     "programming",
     30.00,
-    "",
+    "Dive into the world of Python programming with this concise and comprehensive guide designed for beginners. 'Learn Python in One Day and Learn it Well' is your fast-track ticket to mastering Python fundamentals and kickstarting your programming journey.",
     1
 ),
 (

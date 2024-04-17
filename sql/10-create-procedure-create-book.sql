@@ -24,10 +24,10 @@ BEGIN
             user
         )
         VALUES (
-            p_title,
-            p_author,
-            p_description,
-            p_categories,
+            replace(p_title, '"', ""),
+            replace(p_author, '"', ""),
+            replace(p_description, '"', "'"),
+            replace(p_categories, '"', "'"),
             p_price,
             p_user
         );

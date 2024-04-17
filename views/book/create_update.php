@@ -67,9 +67,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary" formaction="./edit?id=<?php echo $this->view->book->getId() ?>">
-                                <?php echo $this->view->book->hasId() ? "Atualizar" : "Cadastrar" ?>
-                            </button>
+                            <?php if ($this->view->book->hasId()) { ?>
+                                <button type="submit" class="btn btn-primary" formaction="./edit?id=<?php echo $this->view->book->getId() ?>">
+                                    Atualizar
+                                </button>
+                            <?php } else { ?>
+                                <button type="submit" class="btn btn-primary" formaction="./new?id=<?php echo $this->view->book->getId() ?>">
+                                    Cadastrar
+                                </button>
+                            <?php } ?>
 
                             <?php if ($this->view->book->hasId()) { ?>
                                 <button type="submit" class="btn btn-danger" formaction="./delete?id=<?php echo $this->view->book->getId() ?>" formnovalidate>

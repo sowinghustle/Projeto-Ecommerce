@@ -17,10 +17,10 @@ BEGIN
     START TRANSACTION;
 
     UPDATE books SET
-        title=IFNULL(p_title, title),
-        author=IFNULL(p_author, author),
-        description=IFNULL(p_description, description),
-        categories=IFNULL(p_categories, categories),
+        title=replace(IFNULL(p_title, title), '"', ""),
+        author=replace(IFNULL(p_author, author), '"', ""),
+        description=replace(IFNULL(p_description, description), '"', "'"),
+        categories=replace(IFNULL(p_categories, categories), '"', "'"),
         price=IFNULL(p_price, price)
     WHERE id=p_id;
 

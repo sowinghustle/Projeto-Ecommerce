@@ -31,6 +31,10 @@
 
                     <?php if ($this->session->has("usuario-logado")) { ?>
                         <div class="mb-3 w-100">
+                            <a href="./books/new" class="w-100 btn btn-primary">Cadastrar Novo Livro</a>
+                        </div>
+
+                        <div class="mb-3 w-100">
                             <a href="./logout" class="w-100 btn btn-primary">Sair da Conta</a>
                         </div>
 
