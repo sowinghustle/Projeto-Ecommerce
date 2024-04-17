@@ -1,6 +1,7 @@
 <?php
 
 require_once "models/Bookerr.php";
+require_once "models/User.php";
 
 class Book
 {
@@ -120,6 +121,27 @@ class Book
         }
 
         return false;
+    }
+
+    public function fetchOwnerUsername(): string
+    {
+        $id = $this->id;
+
+        try {
+            $db = new Database();
+            $stmt = $db->pdo->prepare("SELECT u.username FROM users u INNER JOIN books b ON b.user=u.id WHERE b.id=:id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                return $result["username"];
+            }
+        } catch (Exception $e) {
+        }
+
+        return "*usuário não encontrado*";
     }
 
     public function hasId()

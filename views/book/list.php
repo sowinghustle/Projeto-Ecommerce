@@ -77,6 +77,11 @@
                                 <input name="price" type="number" step="0.01" min="0.01" class="form-control" value="<?php echo $book->getPrice() ?>" readonly />
                             </div>
 
+                            <div class="mb-3">
+                                <label class="form-label">Vendedor</label>
+                                <input class="form-control" type="text" value="<?php echo $book->fetchOwnerUsername() ?>" readonly />
+                            </div>
+
                             <div class="mt-3">
                                 <input type="button" class="btn btn-primary" value="Visualizar" onclick="window.location.href = '../books/view?id=<?php echo $book->getId() ?>'" />
                             </div>
