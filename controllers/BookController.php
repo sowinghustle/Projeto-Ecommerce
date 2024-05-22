@@ -2,7 +2,7 @@
 
 require_once "BaseController.php";
 require_once "models/Database.php";
-require_once "models/Book.php";
+require_once "models/FactoryBook.php";
 require_once "models/BookList.php";
 
 class BookController extends BaseController
