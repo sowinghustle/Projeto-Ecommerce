@@ -17,7 +17,7 @@ class BookList
     public function fillByUser($userId)
     {
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories, b.price, b.user as userId FROM books b WHERE b.user=:userId");
             $stmt->bindValue(":userId", $userId, PDO::PARAM_INT);
             $stmt->execute();
@@ -38,7 +38,7 @@ class BookList
         $search = $this->search;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare('CALL stp_search_books(:search)');
             $stmt->bindValue(":search", $search, PDO::PARAM_STR);
             $stmt->execute();

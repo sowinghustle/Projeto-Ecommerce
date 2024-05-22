@@ -30,7 +30,7 @@ class User
         $id = $this->id;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM users c WHERE c.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -59,7 +59,7 @@ class User
         $password = $this->password;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
 
             $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM users c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
@@ -90,7 +90,7 @@ class User
         $id = $this->id;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("CALL stp_delete_user(:id)");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -103,7 +103,7 @@ class User
     public function save()
     {
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = null;
 
             if ($this->id == 0) {

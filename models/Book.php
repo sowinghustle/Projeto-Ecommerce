@@ -40,7 +40,7 @@ class Book
     public function save()
     {
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = null;
 
             if (!$this->hasId()) {
@@ -80,7 +80,7 @@ class Book
         $id = $this->id;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("DELETE FROM books WHERE id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -98,7 +98,7 @@ class Book
         $id = $this->id;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories, b.price, b.user FROM books b WHERE b.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -128,7 +128,7 @@ class Book
         $id = $this->id;
 
         try {
-            $db = new Database();
+            $db = Database::getDatabase();
             $stmt = $db->pdo->prepare("SELECT u.username FROM users u INNER JOIN books b ON b.user=u.id WHERE b.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
