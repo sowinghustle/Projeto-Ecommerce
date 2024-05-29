@@ -4,6 +4,7 @@ require_once "BaseController.php";
 require_once "models/Database.php";
 require_once "models/Book.php";
 require_once "models/BookList.php";
+require_once "models/BookCardRenderer.php";
 
 class BookController extends BaseController
 {
