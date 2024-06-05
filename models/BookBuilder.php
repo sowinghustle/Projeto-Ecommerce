@@ -139,6 +139,9 @@ class BookNotOwnerCardBuilder implements CardBuilder
                     <button type='button' class='btn btn-success'>
                         Comprar
                     </button>
+                    <button type='button' class='btn btn-primary div__button--addToCart'>
+                        <image src='../assets/images/cart-plus-solid.svg'>
+                    </button>
                 </div>
             </div>
         </form>";
