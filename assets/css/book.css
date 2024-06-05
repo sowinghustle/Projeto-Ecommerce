@@ -1,0 +1,8 @@
+@import url("./index.css");
+
+.div__button--addToCart {
+    width: 20%;
+}
+.div__button--addToCart img {
+    height: 20px;
+}
