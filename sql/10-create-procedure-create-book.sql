@@ -1,4 +1,4 @@
-DELIMITER //
+DELIMITER / /
 
 CREATE PROCEDURE stp_create_book(
     p_title VARCHAR(255),
