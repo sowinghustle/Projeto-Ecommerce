@@ -3,17 +3,42 @@
 require_once "models/Bookerr.php";
 require_once "models/User.php";
 
-class Book
+interface Book
 {
-    private $id = 0;
-    private $title;
-    private $author;
-    private $description;
-    private $categories;
-    private $price;
-    private $userId;
+    public function save(): bool;
+    public function delete(): bool;
+    public function fillById(): bool;
+    public function fetchOwnerUsername(): string;
+    public function hasId(): bool;
+    public function getId(): int;
+    public function getTitle(): string;
+    public function setTitle($newTitle): void;
+    public function getAuthor(): string;
+    public function setAuthor($newAuthor): void;
+    public function getDescription(): string;
+    public function setDescription($newDescription): void;
+    public function getCategories(): array;
+    public function getRawCategories(): string;
+    public function getImageSource(): string;
+    public function setCategories($newCategories): void;
+    public function getPrice(): float;
+    public function setPrice($newPrice): void;
+    public function getPublicado(): bool;
+    public function renderizarCard(): string;
+    public function getUserId(): int;
+}
 
-    public function __construct($title, $author, $description, $categories, $price, $userId, $id = null)
+abstract class AbstractBook implements Book
+{
+    protected $id = 0;
+    protected $title;
+    protected $author;
+    protected $description;
+    protected $categories;
+    protected $price;
+    protected $userId;
+
+    public function __construct($title, $author, $description, $categories, $price,$ userId, $id = null)
     {
         $this->id = $id ?? 0;
         $this->title = $title;
@@ -24,7 +49,6 @@ class Book
         $this->userId = $userId ?? 0;
     }
 
-
     public static function withId($id): Book
     {
         $book = self::withNothing();
@@ -34,10 +58,10 @@ class Book
 
     public static function withNothing(): Book
     {
-        return new Book("", "", "", "", 0.00, 0);
+        return new Book("", "", "", "", false, 0.00, 0);
     }
 
-    public function save()
+    public function save(): bool
     {
         try {
             $db = Database::getDatabase();
@@ -68,8 +92,7 @@ class Book
                 return true;
             }
         } catch (Exception $e) {
-            var_dump($e);
-            $this->throw_exception();
+            self::throw_exception();
         }
 
         return false;
@@ -87,7 +110,25 @@ class Book
 
             return true;
         } catch (Exception $e) {
-            $this->throw_exception();
+            self::throw_exception();
+        }
+
+        return false;
+    }
+
+    public static function getById($id): bool
+    {
+        try {
+            $db = Database::getDatabase();
+            $stmt = $db->pdo->prepare("SELECT b.id, b.title, b.author, b.description, b.categories, b.price, b.user FROM books b WHERE b.id=:id");
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result;
+        } catch (Exception $e) {
+            self::throw_exception();
         }
 
         return false;
@@ -117,7 +158,7 @@ class Book
                 return true;
             }
         } catch (Exception $e) {
-            $this->throw_exception();
+            self::throw_exception();
         }
 
         return false;
@@ -144,62 +185,62 @@ class Book
         return "*usuário não encontrado*";
     }
 
-    public function hasId()
+    public function hasId(): bool
     {
         return $this->id != 0;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setTitle($newTitle)
+    public function setTitle($newTitle): void
     {
         $this->title = $newTitle;
     }
 
-    public function getAuthor()
+    public function getAuthor(): string
     {
         return $this->author;
     }
 
-    public function setAuthor($newAuthor)
+    public function setAuthor($newAuthor): void
     {
         $this->author = $newAuthor;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription($newDescription)
+    public function setDescription($newDescription): void
     {
         $this->description = $newDescription;
     }
 
-    public function getCategories()
+    public function getCategories(): array
     {
         return $this->categories;
     }
 
-    public function getRawCategories()
+    public function getRawCategories(): string
     {
         return implode(',', $this->categories);
     }
 
-    public function getImageSource()
+    public function getImageSource(): string
     {
         return "https://m.media-amazon.com/images/I/71kEvJKILlL._AC_UF1000,1000_QL80_.jpg";
     }
 
-    public function setCategories($newCategories)
+    public function setCategories($newCategories): void
     {
         if (is_array($newCategories)) {
             $this->categories = $newCategories;
@@ -208,12 +249,12 @@ class Book
         }
     }
 
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function setPrice($newPrice)
+    public function setPrice($newPrice): void
     {
         if ($newPrice < 0)
             throw Bookerr::ValidationError("O preço do livro não pode ser menor que zero!");
@@ -221,12 +262,22 @@ class Book
         $this->price = $newPrice;
     }
 
-    public function getUserId()
+    public function getPublicado(): bool
+    {
+        throw new Exception("Não Implementado.");
+    }
+
+    public function renderizarCard(): string
+    {
+        throw new Exception("Não Implementado.");
+    }
+
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    private function throw_exception()
+    private static function throw_exception(): void
     {
         throw Bookerr::Exception("Desculpe, ocorreu um erro e não foi possível completar a requisição!");
     }
