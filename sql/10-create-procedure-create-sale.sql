@@ -39,7 +39,7 @@ BEGIN
         SELECT LAST_INSERT_ID() INTO v_sale_id;
 
 
-        CALL stp_add_to_cart(p_user, v_sale_id, p_quantity);
+        -- CALL stp_add_to_cart(p_user, v_sale_id, p_quantity);
     END IF;
 
     COMMIT;
