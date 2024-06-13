@@ -21,73 +21,21 @@
 
     <div class="container">
         <div class="main d-flex flex-column align-items-center justify-content-center mt-4">
-            <div class="card text-start h-75 w-50">
-                <div class="card-body">
-                    <form method="POST">
-                        <div class="mb-2">
-                            <span class="text-danger">
-                                <?php echo $this->view->errorMsg ?>
-                            </span>
-                            <span class="text-success">
-                                <?php echo $this->view->successMsg ?>
-                            </span>
-                        </div>
-
-                        <?php if ($this->view->book->hasId()) { ?>
-                            <div class="mb-3">
-                                <label for="id" class="form-label">Código do Livro</label>
-                                <input name="id" type="number" class="form-control" value="<?php echo $this->view->book->getId() ?>" readonly>
-                            </div>
-                        <?php } ?>
-
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Nome do Livro</label>
-                            <input name="title" type="text" class="form-control" value="<?php echo $this->view->book->getTitle() ?>">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="author" class="form-label">Autor do livro</label>
-                            <input name="author" type="text" class="form-control" value="<?php echo $this->view->book->getAuthor() ?>">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Descrição do livro</label>
-                            <textarea name="description" class="form-control" rows="5"><?php echo $this->view->book->getDescription() ?></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="categories" class="form-label">Categorias do livro (separados por
-                                vírgula)</label>
-                            <input name="categories" type="text" class="form-control" value="<?php echo $this->view->book->getRawCategories() ?>">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Valor do livro</label>
-                            <input name="price" type="number" step="0.01" min="0.01" class="form-control" value="<?php echo $this->view->book->getPrice() ?>">
-                        </div>
-
-                        <div class="mb-3">
-                            <?php if ($this->view->book->hasId()) { ?>
-                                <button type="submit" class="btn btn-primary" formaction="./edit?id=<?php echo $this->view->book->getId() ?>">
-                                    Atualizar
-                                </button>
-                            <?php } else { ?>
-                                <button type="submit" class="btn btn-primary" formaction="./new?id=<?php echo $this->view->book->getId() ?>">
-                                    Cadastrar
-                                </button>
-                            <?php } ?>
-
-                            <?php if ($this->view->book->hasId()) { ?>
-                                <button type="submit" class="btn btn-danger" formaction="./delete?id=<?php echo $this->view->book->getId() ?>" formnovalidate>
-                                    Excluir
-                                </button>
-                            <?php } ?>
-                        </div>
-                    </form>
-                </div>
+            <div class="mb-4">
+                <span class="text-danger">
+                    <?php echo $this->view->errorMsg ?>
+                </span>
+                <span class="text-success">
+                    <?php echo $this->view->successMsg ?>
+                </span>
             </div>
 
-            <a href="../books" class="mt-4">Voltar para a listagem de livros</a>
+            <?php
+            $builder = BookBuilderFactory::create($this->view->book, $this->session->get("usuario-logado", 0), $this->view->book->hasId() ? "update" : "create");
+            echo $builder->render();
+            ?>
+
+            <a href="../books" class="mb-4">Voltar para a listagem de livros</a>
         </div>
 
     </div>

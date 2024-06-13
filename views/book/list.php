@@ -47,7 +47,7 @@
                 }
 
                 foreach ($books as $book) {
-                    $builder = FactoryBookBuilder::create($book, $this->session->get("usuario-logado"), "view");
+                    $builder = BookBuilderFactory::create($book, $this->session->get("usuario-logado", 0), "view");
                     echo $builder->render();
                 }
                 ?>
