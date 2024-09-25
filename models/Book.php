@@ -93,6 +93,8 @@ class Book
         return false;
     }
 
+
+
     public function fillById(): bool
     {
         $id = $this->id;
@@ -142,6 +144,45 @@ class Book
         }
 
         return "*usuário não encontrado*";
+    }
+
+    public function addToCart($userId, $saleId, $quantity)
+    {
+        try {
+            $db = Database::getDatabase();
+            $stmt = $db->pdo->prepare("CALL stp_add_to_cart(:userId, :saleId, :quantity)");
+            $stmt->bindValue(":userId", $userId, PDO::PARAM_INT);
+            $stmt->bindValue(":saleId", $saleId, PDO::PARAM_INT);
+            $stmt->bindValue(":quantity", $quantity, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo "Livro adicionado ao carrinho com sucesso.";
+        } catch (Exception $e) {
+            var_dump($e);
+            $this->throw_exception();
+        }
+    }
+
+    public function createSale($userId, $bookId, $quantity, $price, $available)
+    {
+        try {
+            $db = Database::getDatabase();
+            $stmt = $db->pdo->prepare("CALL stp_create_sale(:userId, :bookId, :quantity, :price, :available)");
+            $stmt->bindValue(":userId", $userId, PDO::PARAM_INT);
+            $stmt->bindValue(":bookId", $bookId, PDO::PARAM_INT);
+            $stmt->bindValue(":quantity", $quantity, PDO::PARAM_INT);
+            $stmt->bindValue(":price", $price, PDO::PARAM_STR);
+            $stmt->bindValue(":available", $available, PDO::PARAM_BOOL);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int)$result["sale_id"];
+        } catch (Exception $e) {
+            var_dump($e);
+            $this->throw_exception();
+        }
+
+        return false;
     }
 
     public function hasId()
@@ -196,9 +237,13 @@ class Book
 
     public function getImageSource()
     {
-        return "https://m.media-amazon.com/images/I/71kEvJKILlL._AC_UF1000,1000_QL80_.jpg";
+        return "../assets/images/book-solid.svg";
     }
-
+    // Integrar upload de imagens depois.
+    // public function getImageSource()
+    // {
+    //     return "../assets/images/books/" . $this->id . ".jpg";
+    // }
     public function setCategories($newCategories)
     {
         if (is_array($newCategories)) {

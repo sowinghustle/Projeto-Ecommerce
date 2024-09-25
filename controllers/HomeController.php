@@ -2,12 +2,40 @@
 
 require_once "BaseController.php";
 require_once "models/User.php";
+require_once "models/Report.php";
 
 class HomeController extends BaseController
 {
     public function index()
     {
+        $this->view->errorMsg = "";
+        $this->view->successMsg = "";
         $this->view->title = "Home";
+        $this->view->user = NULL;
+
+        if ($this->session->has("success-msg")) {
+            $this->view->successMsg = $this->session->get("success-msg");
+            $this->session->unset("success-msg");
+        }
+
+        if ($this->session->has("error-msg")) {
+            $this->view->errorMsg = $this->session->get("error-msg");
+            $this->session->unset("error-msg");
+        }
+
+        if ($this->session->has("usuario-logado")) {
+            $this->view->user = User::withId($this->getLoggedUserId());
+
+            try {
+                if (!$this->view->user->fillUserById()) {
+                    $this->session->set("error-msg", "Não foi possível carregar os dados do perfil.");
+                    header("location:../login");
+                }
+            } catch (Bookerr $error) {
+                $this->view->errorMsg = $error->getMessage();
+            }
+        }
+
         include "views/home/index.php";
     }
 
@@ -72,6 +100,36 @@ class HomeController extends BaseController
         include "views/home/profile.php";
     }
 
+    public function admin(){
+        $this->ensureIsLogged();
+
+        $user = User::withId($this->getLoggedUserId());
+
+        try {
+            if (!$user->fillUserById()) {
+                $this->session->set("error-msg", "Não foi possível carregar os dados do perfil.");
+                header("location:..");
+            }
+        } catch (Bookerr $error) {
+            $this->view->errorMsg = $error->getMessage();
+        }
+
+        if (!$user->getIsAdmin()){
+            $this->session->set("error-msg", "Você não tem permissão para acessar esta página.");
+            header("location:..");
+        }
+        $report = new Report();
+        if(!$report->fillData()){
+            $this->session->set("error-msg", "Não foi possível carregar os dados do relatório.");
+            header("location:..");
+        }
+        $this->view->user = $user;
+        $this->view->title = "Admin";
+        $this->view->users = $report->getUsers();
+        $this->view->books = $report->getBooks();
+        include "views/admin/index.php";
+    }
+
     private function ensureIsLogged()
     {
         if (!$this->isUserLogged()) {
@@ -79,5 +137,5 @@ class HomeController extends BaseController
             header("location:../login");
             return;
         }
-    }
+    }    
 }

@@ -9,12 +9,14 @@ class User
     private $username;
     private $email;
     private $password;
+    private $is_admin;
 
     public function __construct($username, $email, $password, $id = null)
     {
         $this->id = $id ?? 0;
         $this->username = $username;
         $this->email = $email;
+        $this->is_admin = false;
 
         if ($password)
             $this->changePassword($password);
@@ -28,24 +30,26 @@ class User
     public function fillUserById(): bool
     {
         $id = $this->id;
-
+        
         try {
             $db = Database::getDatabase();
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM users c WHERE c.id=:id");
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM users c WHERE c.id=:id");
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
-
+            
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            
             if ($result) {
                 $this->id = $result["id"];
                 $this->username = $result["username"];
                 $this->email = $result["email"];
                 $this->password = $result["password"];
+                $this->is_admin = $result["is_admin"];
 
                 return true;
             }
         } catch (Exception $e) {
+            echo $e;
             $this->throw_exception();
         }
 
@@ -61,7 +65,7 @@ class User
         try {
             $db = Database::getDatabase();
 
-            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email FROM users c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
+            $stmt = $db->pdo->prepare("SELECT c.id, c.username, c.password, c.email, c.is_admin FROM users c WHERE (c.username=:username OR c.email=:email) AND c.password=IF(:is_password_optional, c.password, :password)");
             $stmt->bindValue(":username", $username, PDO::PARAM_STR);
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
             $stmt->bindValue(":password", $password, PDO::PARAM_STR);
@@ -75,6 +79,7 @@ class User
                 $this->username = $result["username"];
                 $this->email = $result["email"];
                 $this->password = $result["password"];
+                $this->is_admin = $result["is_admin"];
 
                 return true;
             }
@@ -107,7 +112,7 @@ class User
             $stmt = null;
 
             if ($this->id == 0) {
-                $stmt = $db->pdo->prepare('CALL stp_create_user(:username, :email, :password)');
+                $stmt = $db->pdo->prepare('CALL stp_create_user(:username, :email, :password, FALSE)');
             } else {
                 $stmt = $db->pdo->prepare('CALL stp_update_user(:id, :username, :email, :password)');
                 $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
@@ -169,6 +174,15 @@ class User
         // $this->password = Hash::make($newPassword);
         // TODO: add again later, but checking the hashing results and comparison
         $this->password = $newPassword;
+    }
+
+    public function getIsAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    public function setIsAdmin(){
+        $this->is_admin = true;
     }
 
     private function throw_exception()

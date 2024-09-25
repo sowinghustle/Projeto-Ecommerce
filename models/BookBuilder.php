@@ -53,11 +53,12 @@ class BookOwnerCardBuilder implements CardBuilder
         $this->isReadonly = $value;
     }
 
+
     public function render(): string
     {
         $template = "
             <form method='post' class='card mb-4' style='width:420px;'>
-                <img src='{imageSource}' class='card-img-top' style='height:200px;'>
+                <img src='{imageSource}' class='card-img-top' style='height: 130px;padding: 25px; background: #dfdcdc;'>
 
                 <div class='card-body'>
                     {bookIdField}
@@ -86,12 +87,13 @@ class BookOwnerCardBuilder implements CardBuilder
                         <label for='price' class='form-label'>Valor do livro (R$)</label>
                         <input name='price' type='number' step='0.01' min='0.01' class='form-control' value='{bookPrice}' {readonly} />
                     </div>
-
-                    <div class='mt-3' style='display:flex;gap:2px;'>
-                        {viewButton}
-                        {createButton}
-                        {updateButton}
-                        {deleteButton}
+                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                        <div class='mt-3' style='display:flex;gap:2px;'>
+                            {viewButton}
+                            {createButton}
+                            {updateButton}
+                            {deleteButton}
+                        </div>
                     </div>
                 </div>
             </form>";
@@ -116,7 +118,9 @@ class BookOwnerCardBuilder implements CardBuilder
             "viewButton" => $this->getViewButton(),
             "createButton" => $this->getCreateButton(),
             "updateButton" => $this->getUpdateButton(),
-            "deleteButton" => $this->getDeleteButton()
+            "deleteButton" => $this->getDeleteButton(),
+            "buyButton" => $this->getBuyButton(),
+            "cartButton" => $this->getCartButton()
         ]);
     }
 
@@ -139,6 +143,7 @@ class BookOwnerCardBuilder implements CardBuilder
         return "";
     }
 
+
     private function getUpdateButton()
     {
         if ($this->mode == "update" && !$this->isReadonly) {
@@ -157,6 +162,25 @@ class BookOwnerCardBuilder implements CardBuilder
         $bookId = $this->book->getId();
         return "<button type='submit' class='btn btn-danger' formaction='../books/delete?id=$bookId' formnovalidate=''>Excluir</button>";
     }
+
+    private function getCartButton()
+    {
+        if ($this->mode == "view" || $this->mode == "create" ||  $this->mode == "update")
+            return "";
+
+        $bookId = $this->book->getId();
+        return " <button type='button' class='btn btn-secondary' onclick='window.location.href=\"../books/addToCart?id=$bookId\">
+        <img src='../assets/images/cart-plus-solid.svg' style='width: 20px; height: 20px;'>   
+        </button>";
+    }
+    private function getBuyButton()
+    {
+        if ($this->mode == "view" || $this->mode == "create" ||  $this->mode == "update")
+            return "";
+
+        $bookId = $this->book->getId();
+        return "<button type='button' class='btn btn-success' onclick='window.location.href=\"../books/createSale?id=$bookId\">Comprar</button>";
+    }
 }
 
 class BookNotOwnerCardBuilder implements CardBuilder
@@ -167,11 +191,24 @@ class BookNotOwnerCardBuilder implements CardBuilder
         $this->book = $book;
     }
 
+    private function getCartButton()
+    {
+        $bookId = $this->book->getId();
+        return "<button type='button' class='btn btn-secondary' onclick='window.location.href=\"../books/addToCart?id=$bookId\"'>
+        <img src='../assets/images/cart-plus-solid.svg' style='width: 20px; height: 20px;'>   
+        </button>";
+    }
+    private function getBuyButton()
+    {
+        $bookId = $this->book->getId();
+        return "<button type='button' class='btn btn-success' onclick='window.location.href=\"../books/createSale?id=$bookId\"'>Comprar</button>";
+    }
+
     public function render(): string
     {
         $template = "
             <form method='post' class='card mb-4' style='width:420px;'>
-                <img src='{imageSource}' class='card-img-top' style='height:200px;'>
+                <img src='{imageSource}' class='card-img-top' style='height: 130px;padding: 25px; background: #dfdcdc;'>
 
                 <div class='card-body'>
                     <input name='id' type='hidden' value='{bookId}' />
@@ -206,15 +243,18 @@ class BookNotOwnerCardBuilder implements CardBuilder
                         <input class='form-control' type='text' value='{bookSeller}' disabled />
                     </div>
 
-                    <div class='mt-3' style='display:flex;gap:2px;'>
-                        <button type='button' class='btn btn-success'>
-                            Comprar
-                        </button>
+                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                        <div class='mt-3' style='display:flex;gap:2px;'>
+                        {buyButton}
+                        {cartButton}
+                        </div>
                     </div>
                 </div>
             </form>";
 
         $book = $this->book;
+
+
 
         return _replaceTemplateKeys($template, [
             "bookId" => $book->getId(),
@@ -224,7 +264,9 @@ class BookNotOwnerCardBuilder implements CardBuilder
             "bookDescription" => $book->getDescription(),
             "bookCategories" => $book->getRawCategories(),
             "bookPrice" => $book->getPrice(),
-            "bookSeller" => $book->fetchOwnerUsername()
+            "bookSeller" => $book->fetchOwnerUsername(),
+            "buyButton" => $this->getBuyButton(),
+            "cartButton" => $this->getCartButton()
         ]);
     }
 }

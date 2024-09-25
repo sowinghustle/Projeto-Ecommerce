@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 define("DB_HOST", "ecommerce-db");
 define("DB_NAME", "ecommerce-db");

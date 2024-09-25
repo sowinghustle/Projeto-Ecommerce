@@ -10,5 +10,8 @@
     "/books/view": "BookController@view",
     "/books/new": "BookController@create",
     "/books/edit": "BookController@update",
-    "/books/delete": "BookController@delete"
+    "/books/delete": "BookController@delete",
+    "/books/addToCart": "BookController@addToCart",
+    "/books/createSale": "BookController@createSale",
+    "/admin": "HomeController@admin"
 }

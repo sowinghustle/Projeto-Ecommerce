@@ -30,7 +30,7 @@ class BookController extends BaseController
         } catch (Bookerr $error) {
             $this->view->errorMsg = "Ocorreu um erro ao tentar retornar os livros.";
         }
-
+        
         $this->view->title = "Livros";
         include "views/book/list.php";
     }
@@ -245,6 +245,64 @@ class BookController extends BaseController
 
         if ($book->getPrice() == null || $book->getPrice() <= 0)
             throw Bookerr::ValidationError("Você precisa fornecer um valor válido!");
+    }
+
+    public function addToCart()
+    {
+        $this->ensureIsLogged();
+
+
+        $userId = $this->getLoggedUserId();
+        $saleId = $_POST['sale_id'] ?? null;
+        $quantity = $_POST['quantity'] ?? 1;
+
+        if (!$saleId) {
+            $this->session->set("error-msg", "O ID da venda não foi fornecido.");
+            header("location:../books");
+            return;
+        }
+
+        try {
+            $book = Book::withId($saleId);
+            $book->addToCart($userId, $saleId, $quantity);
+            $this->session->set("success-msg", "Livro adicionado ao carrinho com sucesso!");
+        } catch (Exception $e) {
+            $this->session->set("error-msg", "Não foi possível adicionar o livro ao carrinho. Tente novamente mais tarde.");
+        }
+
+        header("location:../books/view?id=$saleId");
+    }
+
+    public function createSale()
+    {
+        $this->ensureIsLogged();
+
+        $bookId = $_POST['book_id'] ?? null;
+        $quantity = $_POST['quantity'] ?? 1;
+        $price = $_POST['price'] ?? null;
+        $available = $_POST['available'] ?? true;
+
+        if (!$bookId || !$price) {
+            $this->session->set("error-msg", "Dados insuficientes para criar uma venda.");
+            header("location:../books");
+            return;
+        }
+
+        try {
+            $userId = $this->getLoggedUserId();
+            $book = Book::withId($bookId);
+            $saleId = $book->createSale($userId, $bookId, $quantity, $price, $available);
+
+            if ($saleId) {
+                $this->session->set("success-msg", "Venda criada com sucesso!");
+                header("location:../books/view?id=$bookId");
+            } else {
+                throw new Exception("Falha ao criar a venda.");
+            }
+        } catch (Exception $e) {
+            $this->session->set("error-msg", "Não foi possível criar a venda. Tente novamente mais tarde.");
+            header("location:../books");
+        }
     }
 
     private function ensureIsLogged()

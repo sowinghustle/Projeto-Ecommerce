@@ -22,6 +22,16 @@
     </h1>
 
     <div class="container">
+        <div class="mb-2 d-flex justify-content-center">
+            <span class="text-danger">
+                <?php echo $this->view->errorMsg ?>
+            </span>
+
+            <span class="text-success">
+                <?php echo $this->view->successMsg ?>
+            </span>
+        </div>
+
         <div class="main d-flex flex-column align-items-center justify-content-center mt-4">
             <div class="card">
                 <div class="card-body">
@@ -29,7 +39,7 @@
                         <a href="./books" class="w-100 btn btn-primary">Lista de Livros</a>
                     </div>
 
-                    <?php if ($this->session->has("usuario-logado")) { ?>
+                    <?php if ($this->view->user != NULL) { ?>
                         <div class="mb-3 w-100">
                             <a href="./books/new" class="w-100 btn btn-primary">Cadastrar Novo Livro</a>
                         </div>
@@ -37,7 +47,13 @@
                         <div class="mb-3 w-100">
                             <a href="./profile" class="w-100 btn btn-secondary">Perfil</a>
                         </div>
-
+                        
+                        <?php if ($this->view->user->getIsAdmin()){?>
+                        <div class='mb-3 w-100'>
+                            <a href='./admin' class='w-100 btn btn-secondary'>Admin</a>
+                        </div>
+                        <?php } ?>
+                        
                         <div class="mb-3 w-100">
                             <a href="./logout" class="w-100 btn btn-danger">Sair da Conta</a>
                         </div>

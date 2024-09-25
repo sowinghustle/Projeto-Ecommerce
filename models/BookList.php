@@ -32,6 +32,26 @@ class BookList
 
         return false;
     }
+    
+    public function fillByAllBooks(){
+        try {
+            $db = Database::getDatabase();
+            $stmt = $db->pdo->prepare("SELECT b.title, b.author, b.description, b.categories, b.price, b.user as userId, b.id FROM books b ");
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->books = array();
+            foreach($rows as $row){
+              $book = new Book($row['title'], $row['author'], $row['description'], $row['categories'], $row['price'], $row['userId'], $row['id']);
+              array_push($this->books, $book);
+            }
+            return true;
+        } catch (Exception $e) {
+            var_dump($e);
+            $this->throw_exception();
+        }
+
+        return false;
+    }
 
     public function fillBySearchResults()
     {
@@ -51,6 +71,7 @@ class BookList
                 $this->addBook($book);
             }
         } catch (Exception $e) {
+            echo $e;
             $this->throw_exception();
         }
     }
